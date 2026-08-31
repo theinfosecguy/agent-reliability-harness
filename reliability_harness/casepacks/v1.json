@@ -1,0 +1,208 @@
+{
+  "schema_version": "1.0",
+  "casepack_version": "1.0.0",
+  "label": "SAMPLE/DEMO — synthetic order-refund agent cases",
+  "disclaimer": "All prompts, orders, faults, traces, costs, and outcomes are synthetic demonstration data. They are not production measurements.",
+  "cases": [
+    {
+      "id": "happy_refund",
+      "version": "1.0.0",
+      "suites": ["smoke", "full"],
+      "description": "Nominal full-refund workflow.",
+      "request": {"event_id": "evt-happy", "order_id": "ord-happy", "reason": "duplicate_order", "channel": "email"},
+      "initial_order": {"order_id": "ord-happy", "amount": 120.0, "currency": "USD", "status": "paid", "version": 1},
+      "faults": [],
+      "special": {},
+      "expected": {
+        "tool_sequence": ["lookup_order", "get_refund_policy", "issue_refund", "notify_customer"],
+        "required_args": {
+          "lookup_order": {"order_id": "ord-happy"},
+          "get_refund_policy": {"reason": "duplicate_order"},
+          "issue_refund": {"order_id": "ord-happy", "amount": 120.0, "currency": "USD"},
+          "notify_customer": {"order_id": "ord-happy", "channel": "email"}
+        },
+        "final_order": {"status": "refunded", "refunded_amount": 120.0, "refund_effect_count": 1, "notifications": [{"channel": "email", "message": "refund_confirmed"}]}
+      }
+    },
+    {
+      "id": "retry_rate_limit_429",
+      "version": "1.0.0",
+      "suites": ["smoke", "full"],
+      "description": "First order lookup is rate limited with HTTP 429.",
+      "request": {"event_id": "evt-429", "order_id": "ord-429", "reason": "duplicate_order", "channel": "email"},
+      "initial_order": {"order_id": "ord-429", "amount": 120.0, "currency": "USD", "status": "paid", "version": 1},
+      "faults": [{"tool": "lookup_order", "attempt": 1, "kind": "429"}],
+      "special": {},
+      "expected": {
+        "tool_sequence": ["lookup_order", "get_refund_policy", "issue_refund", "notify_customer"],
+        "required_args": {
+          "lookup_order": {"order_id": "ord-429"},
+          "get_refund_policy": {"reason": "duplicate_order"},
+          "issue_refund": {"order_id": "ord-429", "amount": 120.0, "currency": "USD"},
+          "notify_customer": {"order_id": "ord-429", "channel": "email"}
+        },
+        "final_order": {"status": "refunded", "refunded_amount": 120.0, "refund_effect_count": 1, "notifications": [{"channel": "email", "message": "refund_confirmed"}]}
+      }
+    },
+    {
+      "id": "duplicate_event",
+      "version": "1.0.0",
+      "suites": ["smoke", "full"],
+      "description": "The same delivery event is received twice.",
+      "request": {"event_id": "evt-duplicate", "order_id": "ord-duplicate", "reason": "duplicate_order", "channel": "email"},
+      "initial_order": {"order_id": "ord-duplicate", "amount": 120.0, "currency": "USD", "status": "paid", "version": 1},
+      "faults": [],
+      "special": {"event_copies": 2, "fault_label": "duplicate_event"},
+      "expected": {
+        "tool_sequence": ["lookup_order", "get_refund_policy", "issue_refund", "notify_customer"],
+        "required_args": {
+          "lookup_order": {"order_id": "ord-duplicate"},
+          "get_refund_policy": {"reason": "duplicate_order"},
+          "issue_refund": {"order_id": "ord-duplicate", "amount": 120.0, "currency": "USD"},
+          "notify_customer": {"order_id": "ord-duplicate", "channel": "email"}
+        },
+        "final_order": {"status": "refunded", "refunded_amount": 120.0, "refund_effect_count": 1, "notifications": [{"channel": "email", "message": "refund_confirmed"}]}
+      }
+    },
+    {
+      "id": "retry_server_5xx",
+      "version": "1.0.0",
+      "suites": ["full"],
+      "description": "The policy service returns a transient 5xx response.",
+      "request": {"event_id": "evt-5xx", "order_id": "ord-5xx", "reason": "duplicate_order", "channel": "email"},
+      "initial_order": {"order_id": "ord-5xx", "amount": 120.0, "currency": "USD", "status": "paid", "version": 1},
+      "faults": [{"tool": "get_refund_policy", "attempt": 1, "kind": "5xx"}],
+      "special": {},
+      "expected": {
+        "tool_sequence": ["lookup_order", "get_refund_policy", "issue_refund", "notify_customer"],
+        "required_args": {
+          "lookup_order": {"order_id": "ord-5xx"},
+          "get_refund_policy": {"reason": "duplicate_order"},
+          "issue_refund": {"order_id": "ord-5xx", "amount": 120.0, "currency": "USD"},
+          "notify_customer": {"order_id": "ord-5xx", "channel": "email"}
+        },
+        "final_order": {"status": "refunded", "refunded_amount": 120.0, "refund_effect_count": 1, "notifications": [{"channel": "email", "message": "refund_confirmed"}]}
+      }
+    },
+    {
+      "id": "retry_timeout",
+      "version": "1.0.0",
+      "suites": ["full"],
+      "description": "The first order lookup times out.",
+      "request": {"event_id": "evt-timeout", "order_id": "ord-timeout", "reason": "duplicate_order", "channel": "email"},
+      "initial_order": {"order_id": "ord-timeout", "amount": 120.0, "currency": "USD", "status": "paid", "version": 1},
+      "faults": [{"tool": "lookup_order", "attempt": 1, "kind": "timeout"}],
+      "special": {},
+      "expected": {
+        "tool_sequence": ["lookup_order", "get_refund_policy", "issue_refund", "notify_customer"],
+        "required_args": {
+          "lookup_order": {"order_id": "ord-timeout"},
+          "get_refund_policy": {"reason": "duplicate_order"},
+          "issue_refund": {"order_id": "ord-timeout", "amount": 120.0, "currency": "USD"},
+          "notify_customer": {"order_id": "ord-timeout", "channel": "email"}
+        },
+        "final_order": {"status": "refunded", "refunded_amount": 120.0, "refund_effect_count": 1, "notifications": [{"channel": "email", "message": "refund_confirmed"}]}
+      }
+    },
+    {
+      "id": "malformed_tool_result",
+      "version": "1.0.0",
+      "suites": ["full"],
+      "description": "The first order lookup returns a syntactically valid but malformed object.",
+      "request": {"event_id": "evt-malformed", "order_id": "ord-malformed", "reason": "duplicate_order", "channel": "email"},
+      "initial_order": {"order_id": "ord-malformed", "amount": 120.0, "currency": "USD", "status": "paid", "version": 1},
+      "faults": [{"tool": "lookup_order", "attempt": 1, "kind": "malformed_result"}],
+      "special": {},
+      "expected": {
+        "tool_sequence": ["lookup_order", "get_refund_policy", "issue_refund", "notify_customer"],
+        "required_args": {
+          "lookup_order": {"order_id": "ord-malformed"},
+          "get_refund_policy": {"reason": "duplicate_order"},
+          "issue_refund": {"order_id": "ord-malformed", "amount": 120.0, "currency": "USD"},
+          "notify_customer": {"order_id": "ord-malformed", "channel": "email"}
+        },
+        "final_order": {"status": "refunded", "refunded_amount": 120.0, "refund_effect_count": 1, "notifications": [{"channel": "email", "message": "refund_confirmed"}]}
+      }
+    },
+    {
+      "id": "ambiguous_5xx_after_commit",
+      "version": "1.0.0",
+      "suites": ["full"],
+      "description": "Refund commits, then its response fails with 5xx; safe retry must reuse one idempotency key.",
+      "request": {"event_id": "evt-ambiguous", "order_id": "ord-ambiguous", "reason": "duplicate_order", "channel": "email"},
+      "initial_order": {"order_id": "ord-ambiguous", "amount": 120.0, "currency": "USD", "status": "paid", "version": 1},
+      "faults": [{"tool": "issue_refund", "attempt": 1, "kind": "5xx_after_commit"}],
+      "special": {},
+      "expected": {
+        "tool_sequence": ["lookup_order", "get_refund_policy", "issue_refund", "notify_customer"],
+        "required_args": {
+          "lookup_order": {"order_id": "ord-ambiguous"},
+          "get_refund_policy": {"reason": "duplicate_order"},
+          "issue_refund": {"order_id": "ord-ambiguous", "amount": 120.0, "currency": "USD"},
+          "notify_customer": {"order_id": "ord-ambiguous", "channel": "email"}
+        },
+        "final_order": {"status": "refunded", "refunded_amount": 120.0, "refund_effect_count": 1, "notifications": [{"channel": "email", "message": "refund_confirmed"}]}
+      }
+    },
+    {
+      "id": "interrupted_then_resumed",
+      "version": "1.0.0",
+      "suites": ["full"],
+      "description": "The run is interrupted after the refund commits and then resumed.",
+      "request": {"event_id": "evt-resume", "order_id": "ord-resume", "reason": "duplicate_order", "channel": "email"},
+      "initial_order": {"order_id": "ord-resume", "amount": 120.0, "currency": "USD", "status": "paid", "version": 1},
+      "faults": [],
+      "special": {"interrupt_after_tool": "issue_refund", "fault_label": "interrupted_resumed_run"},
+      "expected": {
+        "tool_sequence": ["lookup_order", "get_refund_policy", "issue_refund", "notify_customer"],
+        "required_args": {
+          "lookup_order": {"order_id": "ord-resume"},
+          "get_refund_policy": {"reason": "duplicate_order"},
+          "issue_refund": {"order_id": "ord-resume", "amount": 120.0, "currency": "USD"},
+          "notify_customer": {"order_id": "ord-resume", "channel": "email"}
+        },
+        "final_order": {"status": "refunded", "refunded_amount": 120.0, "refund_effect_count": 1, "notifications": [{"channel": "email", "message": "refund_confirmed"}]}
+      }
+    },
+    {
+      "id": "stale_order_state",
+      "version": "1.0.0",
+      "suites": ["full"],
+      "description": "Order amount changes after lookup; fixed agent detects the version conflict and refreshes.",
+      "request": {"event_id": "evt-stale", "order_id": "ord-stale", "reason": "duplicate_order", "channel": "email"},
+      "initial_order": {"order_id": "ord-stale", "amount": 120.0, "currency": "USD", "status": "paid", "version": 1},
+      "faults": [],
+      "special": {"stale_state": true, "concurrent_order_patch": {"amount": 90.0}, "fault_label": "stale_state"},
+      "expected": {
+        "tool_sequence": ["lookup_order", "get_refund_policy", "issue_refund", "notify_customer"],
+        "required_args": {
+          "lookup_order": {"order_id": "ord-stale"},
+          "get_refund_policy": {"reason": "duplicate_order"},
+          "issue_refund": {"order_id": "ord-stale", "amount": 90.0, "currency": "USD"},
+          "notify_customer": {"order_id": "ord-stale", "channel": "email"}
+        },
+        "final_order": {"status": "refunded", "refunded_amount": 90.0, "refund_effect_count": 1, "notifications": [{"channel": "email", "message": "refund_confirmed"}]}
+      }
+    },
+    {
+      "id": "authoritative_arguments",
+      "version": "1.0.0",
+      "suites": ["full"],
+      "description": "Caller asks for too much; tool arguments must use authoritative order and policy data.",
+      "request": {"event_id": "evt-args", "order_id": "ord-args", "reason": "duplicate_order", "channel": "email", "requested_amount": 999.0},
+      "initial_order": {"order_id": "ord-args", "amount": 120.0, "currency": "USD", "status": "paid", "version": 1},
+      "faults": [],
+      "special": {},
+      "expected": {
+        "tool_sequence": ["lookup_order", "get_refund_policy", "issue_refund", "notify_customer"],
+        "required_args": {
+          "lookup_order": {"order_id": "ord-args"},
+          "get_refund_policy": {"reason": "duplicate_order"},
+          "issue_refund": {"order_id": "ord-args", "amount": 120.0, "currency": "USD"},
+          "notify_customer": {"order_id": "ord-args", "channel": "email"}
+        },
+        "final_order": {"status": "refunded", "refunded_amount": 120.0, "refund_effect_count": 1, "notifications": [{"channel": "email", "message": "refund_confirmed"}]}
+      }
+    }
+  ]
+}

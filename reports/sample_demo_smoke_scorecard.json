@@ -1,0 +1,3024 @@
+{
+  "assertion_names": [
+    "tool_choice",
+    "tool_order",
+    "tool_arguments",
+    "final_state",
+    "retry_recovery",
+    "idempotency",
+    "event_resume_handling",
+    "trace_completeness"
+  ],
+  "case_count": 3,
+  "casepack_version": "1.0.0",
+  "deterministic_report_time": "2000-01-01T00:00:00Z",
+  "disclaimer": "All prompts, orders, faults, traces, costs, and outcomes are synthetic demonstration data. They are not production measurements.",
+  "implementations": [
+    "unreliable",
+    "fixed"
+  ],
+  "label": "SAMPLE/DEMO \u2014 deterministic AI-agent reliability scorecard",
+  "report_schema_version": "1.0",
+  "results": [
+    {
+      "assertion_score": 8,
+      "assertion_total": 8,
+      "assertions": {
+        "event_resume_handling": true,
+        "final_state": true,
+        "idempotency": true,
+        "retry_recovery": true,
+        "tool_arguments": true,
+        "tool_choice": true,
+        "tool_order": true,
+        "trace_completeness": true
+      },
+      "case_id": "happy_refund",
+      "case_version": "1.0.0",
+      "description": "Nominal full-refund workflow.",
+      "diagnostics": {
+        "argument_checks": {
+          "get_refund_policy": true,
+          "issue_refund": true,
+          "lookup_order": true,
+          "notify_customer": true
+        },
+        "attempted_tools": [
+          "get_refund_policy",
+          "issue_refund",
+          "lookup_order",
+          "notify_customer"
+        ],
+        "completed": true,
+        "final_order": {
+          "amount": 120.0,
+          "currency": "USD",
+          "notifications": [
+            {
+              "channel": "email",
+              "message": "refund_confirmed"
+            }
+          ],
+          "order_id": "ord-happy",
+          "refund_effect_count": 1,
+          "refunded_amount": 120.0,
+          "status": "refunded",
+          "version": 2
+        },
+        "retry_checks": {},
+        "successful_tool_order": [
+          "lookup_order",
+          "get_refund_policy",
+          "issue_refund",
+          "notify_customer"
+        ]
+      },
+      "errors": [],
+      "faults": [],
+      "final_state": {
+        "checkpoints": {},
+        "idempotency_key_count": 0,
+        "order": {
+          "amount": 120.0,
+          "currency": "USD",
+          "notifications": [
+            {
+              "channel": "email",
+              "message": "refund_confirmed"
+            }
+          ],
+          "order_id": "ord-happy",
+          "refund_effect_count": 1,
+          "refunded_amount": 120.0,
+          "status": "refunded",
+          "version": 2
+        },
+        "processed_events": []
+      },
+      "implementation": "unreliable",
+      "passed": true,
+      "seed": 1690623067,
+      "special_fault": null,
+      "telemetry": {
+        "cost_usd": 0.00021,
+        "latency_ms": 67,
+        "trace_event_count": 6
+      },
+      "trace": [
+        {
+          "args": null,
+          "attempt": null,
+          "case_id": "happy_refund",
+          "cost_usd": 0.0,
+          "details": {
+            "implementation_note": "happy_path_only"
+          },
+          "elapsed_ms": 0,
+          "error_code": null,
+          "event_id": "evt-happy",
+          "event_type": "agent_start",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 0,
+          "outcome": "ok",
+          "sequence": 1,
+          "tool": null,
+          "trial": 1
+        },
+        {
+          "args": {
+            "order_id": "ord-happy"
+          },
+          "attempt": 1,
+          "case_id": "happy_refund",
+          "cost_usd": 4e-05,
+          "details": {},
+          "elapsed_ms": 14,
+          "error_code": null,
+          "event_id": "evt-happy",
+          "event_type": "tool_call",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 14,
+          "outcome": "ok",
+          "sequence": 2,
+          "tool": "lookup_order",
+          "trial": 1
+        },
+        {
+          "args": {
+            "reason": "duplicate_order"
+          },
+          "attempt": 1,
+          "case_id": "happy_refund",
+          "cost_usd": 3e-05,
+          "details": {},
+          "elapsed_ms": 24,
+          "error_code": null,
+          "event_id": "evt-happy",
+          "event_type": "tool_call",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 10,
+          "outcome": "ok",
+          "sequence": 3,
+          "tool": "get_refund_policy",
+          "trial": 1
+        },
+        {
+          "args": {
+            "amount": 120.0,
+            "currency": "USD",
+            "order_id": "ord-happy"
+          },
+          "attempt": 1,
+          "case_id": "happy_refund",
+          "cost_usd": 9e-05,
+          "details": {},
+          "elapsed_ms": 50,
+          "error_code": null,
+          "event_id": "evt-happy",
+          "event_type": "tool_call",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 26,
+          "outcome": "ok",
+          "sequence": 4,
+          "tool": "issue_refund",
+          "trial": 1
+        },
+        {
+          "args": {
+            "channel": "email",
+            "order_id": "ord-happy"
+          },
+          "attempt": 1,
+          "case_id": "happy_refund",
+          "cost_usd": 5e-05,
+          "details": {},
+          "elapsed_ms": 67,
+          "error_code": null,
+          "event_id": "evt-happy",
+          "event_type": "tool_call",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 17,
+          "outcome": "ok",
+          "sequence": 5,
+          "tool": "notify_customer",
+          "trial": 1
+        },
+        {
+          "args": null,
+          "attempt": null,
+          "case_id": "happy_refund",
+          "cost_usd": 0.0,
+          "details": {},
+          "elapsed_ms": 67,
+          "error_code": null,
+          "event_id": "evt-happy",
+          "event_type": "agent_complete",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 0,
+          "outcome": "ok",
+          "sequence": 6,
+          "tool": null,
+          "trial": 1
+        }
+      ],
+      "trial": 1
+    },
+    {
+      "assertion_score": 8,
+      "assertion_total": 8,
+      "assertions": {
+        "event_resume_handling": true,
+        "final_state": true,
+        "idempotency": true,
+        "retry_recovery": true,
+        "tool_arguments": true,
+        "tool_choice": true,
+        "tool_order": true,
+        "trace_completeness": true
+      },
+      "case_id": "happy_refund",
+      "case_version": "1.0.0",
+      "description": "Nominal full-refund workflow.",
+      "diagnostics": {
+        "argument_checks": {
+          "get_refund_policy": true,
+          "issue_refund": true,
+          "lookup_order": true,
+          "notify_customer": true
+        },
+        "attempted_tools": [
+          "get_refund_policy",
+          "issue_refund",
+          "lookup_order",
+          "notify_customer"
+        ],
+        "completed": true,
+        "final_order": {
+          "amount": 120.0,
+          "currency": "USD",
+          "notifications": [
+            {
+              "channel": "email",
+              "message": "refund_confirmed"
+            }
+          ],
+          "order_id": "ord-happy",
+          "refund_effect_count": 1,
+          "refunded_amount": 120.0,
+          "status": "refunded",
+          "version": 2
+        },
+        "retry_checks": {},
+        "successful_tool_order": [
+          "lookup_order",
+          "get_refund_policy",
+          "issue_refund",
+          "notify_customer"
+        ]
+      },
+      "errors": [],
+      "faults": [],
+      "final_state": {
+        "checkpoints": {},
+        "idempotency_key_count": 0,
+        "order": {
+          "amount": 120.0,
+          "currency": "USD",
+          "notifications": [
+            {
+              "channel": "email",
+              "message": "refund_confirmed"
+            }
+          ],
+          "order_id": "ord-happy",
+          "refund_effect_count": 1,
+          "refunded_amount": 120.0,
+          "status": "refunded",
+          "version": 2
+        },
+        "processed_events": []
+      },
+      "implementation": "unreliable",
+      "passed": true,
+      "seed": 415199240,
+      "special_fault": null,
+      "telemetry": {
+        "cost_usd": 0.00021,
+        "latency_ms": 71,
+        "trace_event_count": 6
+      },
+      "trace": [
+        {
+          "args": null,
+          "attempt": null,
+          "case_id": "happy_refund",
+          "cost_usd": 0.0,
+          "details": {
+            "implementation_note": "happy_path_only"
+          },
+          "elapsed_ms": 0,
+          "error_code": null,
+          "event_id": "evt-happy",
+          "event_type": "agent_start",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 0,
+          "outcome": "ok",
+          "sequence": 1,
+          "tool": null,
+          "trial": 2
+        },
+        {
+          "args": {
+            "order_id": "ord-happy"
+          },
+          "attempt": 1,
+          "case_id": "happy_refund",
+          "cost_usd": 4e-05,
+          "details": {},
+          "elapsed_ms": 15,
+          "error_code": null,
+          "event_id": "evt-happy",
+          "event_type": "tool_call",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 15,
+          "outcome": "ok",
+          "sequence": 2,
+          "tool": "lookup_order",
+          "trial": 2
+        },
+        {
+          "args": {
+            "reason": "duplicate_order"
+          },
+          "attempt": 1,
+          "case_id": "happy_refund",
+          "cost_usd": 3e-05,
+          "details": {},
+          "elapsed_ms": 26,
+          "error_code": null,
+          "event_id": "evt-happy",
+          "event_type": "tool_call",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 11,
+          "outcome": "ok",
+          "sequence": 3,
+          "tool": "get_refund_policy",
+          "trial": 2
+        },
+        {
+          "args": {
+            "amount": 120.0,
+            "currency": "USD",
+            "order_id": "ord-happy"
+          },
+          "attempt": 1,
+          "case_id": "happy_refund",
+          "cost_usd": 9e-05,
+          "details": {},
+          "elapsed_ms": 53,
+          "error_code": null,
+          "event_id": "evt-happy",
+          "event_type": "tool_call",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 27,
+          "outcome": "ok",
+          "sequence": 4,
+          "tool": "issue_refund",
+          "trial": 2
+        },
+        {
+          "args": {
+            "channel": "email",
+            "order_id": "ord-happy"
+          },
+          "attempt": 1,
+          "case_id": "happy_refund",
+          "cost_usd": 5e-05,
+          "details": {},
+          "elapsed_ms": 71,
+          "error_code": null,
+          "event_id": "evt-happy",
+          "event_type": "tool_call",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 18,
+          "outcome": "ok",
+          "sequence": 5,
+          "tool": "notify_customer",
+          "trial": 2
+        },
+        {
+          "args": null,
+          "attempt": null,
+          "case_id": "happy_refund",
+          "cost_usd": 0.0,
+          "details": {},
+          "elapsed_ms": 71,
+          "error_code": null,
+          "event_id": "evt-happy",
+          "event_type": "agent_complete",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 0,
+          "outcome": "ok",
+          "sequence": 6,
+          "tool": null,
+          "trial": 2
+        }
+      ],
+      "trial": 2
+    },
+    {
+      "assertion_score": 8,
+      "assertion_total": 8,
+      "assertions": {
+        "event_resume_handling": true,
+        "final_state": true,
+        "idempotency": true,
+        "retry_recovery": true,
+        "tool_arguments": true,
+        "tool_choice": true,
+        "tool_order": true,
+        "trace_completeness": true
+      },
+      "case_id": "happy_refund",
+      "case_version": "1.0.0",
+      "description": "Nominal full-refund workflow.",
+      "diagnostics": {
+        "argument_checks": {
+          "get_refund_policy": true,
+          "issue_refund": true,
+          "lookup_order": true,
+          "notify_customer": true
+        },
+        "attempted_tools": [
+          "get_refund_policy",
+          "issue_refund",
+          "lookup_order",
+          "notify_customer"
+        ],
+        "completed": true,
+        "final_order": {
+          "amount": 120.0,
+          "currency": "USD",
+          "notifications": [
+            {
+              "channel": "email",
+              "message": "refund_confirmed"
+            }
+          ],
+          "order_id": "ord-happy",
+          "refund_effect_count": 1,
+          "refunded_amount": 120.0,
+          "status": "refunded",
+          "version": 2
+        },
+        "retry_checks": {},
+        "successful_tool_order": [
+          "lookup_order",
+          "get_refund_policy",
+          "issue_refund",
+          "notify_customer"
+        ]
+      },
+      "errors": [],
+      "faults": [],
+      "final_state": {
+        "checkpoints": {
+          "evt-happy": {
+            "notification": {
+              "channel": "email",
+              "delivered": true,
+              "message": "refund_confirmed"
+            },
+            "order": {
+              "amount": 120.0,
+              "currency": "USD",
+              "order_id": "ord-happy",
+              "status": "paid",
+              "version": 1
+            },
+            "policy": {
+              "currency": "USD",
+              "eligible": true,
+              "max_refund": 120.0,
+              "reason": "duplicate_order"
+            },
+            "refund": {
+              "amount": 120.0,
+              "currency": "USD",
+              "order_version": 2,
+              "refund_id": "refund-ord-happy-1"
+            },
+            "stage": "complete"
+          }
+        },
+        "idempotency_key_count": 2,
+        "order": {
+          "amount": 120.0,
+          "currency": "USD",
+          "notifications": [
+            {
+              "channel": "email",
+              "message": "refund_confirmed"
+            }
+          ],
+          "order_id": "ord-happy",
+          "refund_effect_count": 1,
+          "refunded_amount": 120.0,
+          "status": "refunded",
+          "version": 2
+        },
+        "processed_events": [
+          "evt-happy"
+        ]
+      },
+      "implementation": "fixed",
+      "passed": true,
+      "seed": 1690623067,
+      "special_fault": null,
+      "telemetry": {
+        "cost_usd": 0.00021,
+        "latency_ms": 67,
+        "trace_event_count": 6
+      },
+      "trace": [
+        {
+          "args": null,
+          "attempt": null,
+          "case_id": "happy_refund",
+          "cost_usd": 0.0,
+          "details": {},
+          "elapsed_ms": 0,
+          "error_code": null,
+          "event_id": "evt-happy",
+          "event_type": "agent_start",
+          "idempotency_key": null,
+          "implementation": "fixed",
+          "latency_ms": 0,
+          "outcome": "ok",
+          "sequence": 1,
+          "tool": null,
+          "trial": 1
+        },
+        {
+          "args": {
+            "order_id": "ord-happy"
+          },
+          "attempt": 1,
+          "case_id": "happy_refund",
+          "cost_usd": 4e-05,
+          "details": {},
+          "elapsed_ms": 14,
+          "error_code": null,
+          "event_id": "evt-happy",
+          "event_type": "tool_call",
+          "idempotency_key": null,
+          "implementation": "fixed",
+          "latency_ms": 14,
+          "outcome": "ok",
+          "sequence": 2,
+          "tool": "lookup_order",
+          "trial": 1
+        },
+        {
+          "args": {
+            "reason": "duplicate_order"
+          },
+          "attempt": 1,
+          "case_id": "happy_refund",
+          "cost_usd": 3e-05,
+          "details": {},
+          "elapsed_ms": 24,
+          "error_code": null,
+          "event_id": "evt-happy",
+          "event_type": "tool_call",
+          "idempotency_key": null,
+          "implementation": "fixed",
+          "latency_ms": 10,
+          "outcome": "ok",
+          "sequence": 3,
+          "tool": "get_refund_policy",
+          "trial": 1
+        },
+        {
+          "args": {
+            "amount": 120.0,
+            "currency": "USD",
+            "expected_version": 1,
+            "order_id": "ord-happy"
+          },
+          "attempt": 1,
+          "case_id": "happy_refund",
+          "cost_usd": 9e-05,
+          "details": {},
+          "elapsed_ms": 50,
+          "error_code": null,
+          "event_id": "evt-happy",
+          "event_type": "tool_call",
+          "idempotency_key": "evt-happy:refund",
+          "implementation": "fixed",
+          "latency_ms": 26,
+          "outcome": "ok",
+          "sequence": 4,
+          "tool": "issue_refund",
+          "trial": 1
+        },
+        {
+          "args": {
+            "channel": "email",
+            "order_id": "ord-happy"
+          },
+          "attempt": 1,
+          "case_id": "happy_refund",
+          "cost_usd": 5e-05,
+          "details": {},
+          "elapsed_ms": 67,
+          "error_code": null,
+          "event_id": "evt-happy",
+          "event_type": "tool_call",
+          "idempotency_key": "evt-happy:notification",
+          "implementation": "fixed",
+          "latency_ms": 17,
+          "outcome": "ok",
+          "sequence": 5,
+          "tool": "notify_customer",
+          "trial": 1
+        },
+        {
+          "args": null,
+          "attempt": null,
+          "case_id": "happy_refund",
+          "cost_usd": 0.0,
+          "details": {},
+          "elapsed_ms": 67,
+          "error_code": null,
+          "event_id": "evt-happy",
+          "event_type": "agent_complete",
+          "idempotency_key": null,
+          "implementation": "fixed",
+          "latency_ms": 0,
+          "outcome": "ok",
+          "sequence": 6,
+          "tool": null,
+          "trial": 1
+        }
+      ],
+      "trial": 1
+    },
+    {
+      "assertion_score": 8,
+      "assertion_total": 8,
+      "assertions": {
+        "event_resume_handling": true,
+        "final_state": true,
+        "idempotency": true,
+        "retry_recovery": true,
+        "tool_arguments": true,
+        "tool_choice": true,
+        "tool_order": true,
+        "trace_completeness": true
+      },
+      "case_id": "happy_refund",
+      "case_version": "1.0.0",
+      "description": "Nominal full-refund workflow.",
+      "diagnostics": {
+        "argument_checks": {
+          "get_refund_policy": true,
+          "issue_refund": true,
+          "lookup_order": true,
+          "notify_customer": true
+        },
+        "attempted_tools": [
+          "get_refund_policy",
+          "issue_refund",
+          "lookup_order",
+          "notify_customer"
+        ],
+        "completed": true,
+        "final_order": {
+          "amount": 120.0,
+          "currency": "USD",
+          "notifications": [
+            {
+              "channel": "email",
+              "message": "refund_confirmed"
+            }
+          ],
+          "order_id": "ord-happy",
+          "refund_effect_count": 1,
+          "refunded_amount": 120.0,
+          "status": "refunded",
+          "version": 2
+        },
+        "retry_checks": {},
+        "successful_tool_order": [
+          "lookup_order",
+          "get_refund_policy",
+          "issue_refund",
+          "notify_customer"
+        ]
+      },
+      "errors": [],
+      "faults": [],
+      "final_state": {
+        "checkpoints": {
+          "evt-happy": {
+            "notification": {
+              "channel": "email",
+              "delivered": true,
+              "message": "refund_confirmed"
+            },
+            "order": {
+              "amount": 120.0,
+              "currency": "USD",
+              "order_id": "ord-happy",
+              "status": "paid",
+              "version": 1
+            },
+            "policy": {
+              "currency": "USD",
+              "eligible": true,
+              "max_refund": 120.0,
+              "reason": "duplicate_order"
+            },
+            "refund": {
+              "amount": 120.0,
+              "currency": "USD",
+              "order_version": 2,
+              "refund_id": "refund-ord-happy-1"
+            },
+            "stage": "complete"
+          }
+        },
+        "idempotency_key_count": 2,
+        "order": {
+          "amount": 120.0,
+          "currency": "USD",
+          "notifications": [
+            {
+              "channel": "email",
+              "message": "refund_confirmed"
+            }
+          ],
+          "order_id": "ord-happy",
+          "refund_effect_count": 1,
+          "refunded_amount": 120.0,
+          "status": "refunded",
+          "version": 2
+        },
+        "processed_events": [
+          "evt-happy"
+        ]
+      },
+      "implementation": "fixed",
+      "passed": true,
+      "seed": 415199240,
+      "special_fault": null,
+      "telemetry": {
+        "cost_usd": 0.00021,
+        "latency_ms": 71,
+        "trace_event_count": 6
+      },
+      "trace": [
+        {
+          "args": null,
+          "attempt": null,
+          "case_id": "happy_refund",
+          "cost_usd": 0.0,
+          "details": {},
+          "elapsed_ms": 0,
+          "error_code": null,
+          "event_id": "evt-happy",
+          "event_type": "agent_start",
+          "idempotency_key": null,
+          "implementation": "fixed",
+          "latency_ms": 0,
+          "outcome": "ok",
+          "sequence": 1,
+          "tool": null,
+          "trial": 2
+        },
+        {
+          "args": {
+            "order_id": "ord-happy"
+          },
+          "attempt": 1,
+          "case_id": "happy_refund",
+          "cost_usd": 4e-05,
+          "details": {},
+          "elapsed_ms": 15,
+          "error_code": null,
+          "event_id": "evt-happy",
+          "event_type": "tool_call",
+          "idempotency_key": null,
+          "implementation": "fixed",
+          "latency_ms": 15,
+          "outcome": "ok",
+          "sequence": 2,
+          "tool": "lookup_order",
+          "trial": 2
+        },
+        {
+          "args": {
+            "reason": "duplicate_order"
+          },
+          "attempt": 1,
+          "case_id": "happy_refund",
+          "cost_usd": 3e-05,
+          "details": {},
+          "elapsed_ms": 26,
+          "error_code": null,
+          "event_id": "evt-happy",
+          "event_type": "tool_call",
+          "idempotency_key": null,
+          "implementation": "fixed",
+          "latency_ms": 11,
+          "outcome": "ok",
+          "sequence": 3,
+          "tool": "get_refund_policy",
+          "trial": 2
+        },
+        {
+          "args": {
+            "amount": 120.0,
+            "currency": "USD",
+            "expected_version": 1,
+            "order_id": "ord-happy"
+          },
+          "attempt": 1,
+          "case_id": "happy_refund",
+          "cost_usd": 9e-05,
+          "details": {},
+          "elapsed_ms": 53,
+          "error_code": null,
+          "event_id": "evt-happy",
+          "event_type": "tool_call",
+          "idempotency_key": "evt-happy:refund",
+          "implementation": "fixed",
+          "latency_ms": 27,
+          "outcome": "ok",
+          "sequence": 4,
+          "tool": "issue_refund",
+          "trial": 2
+        },
+        {
+          "args": {
+            "channel": "email",
+            "order_id": "ord-happy"
+          },
+          "attempt": 1,
+          "case_id": "happy_refund",
+          "cost_usd": 5e-05,
+          "details": {},
+          "elapsed_ms": 71,
+          "error_code": null,
+          "event_id": "evt-happy",
+          "event_type": "tool_call",
+          "idempotency_key": "evt-happy:notification",
+          "implementation": "fixed",
+          "latency_ms": 18,
+          "outcome": "ok",
+          "sequence": 5,
+          "tool": "notify_customer",
+          "trial": 2
+        },
+        {
+          "args": null,
+          "attempt": null,
+          "case_id": "happy_refund",
+          "cost_usd": 0.0,
+          "details": {},
+          "elapsed_ms": 71,
+          "error_code": null,
+          "event_id": "evt-happy",
+          "event_type": "agent_complete",
+          "idempotency_key": null,
+          "implementation": "fixed",
+          "latency_ms": 0,
+          "outcome": "ok",
+          "sequence": 6,
+          "tool": null,
+          "trial": 2
+        }
+      ],
+      "trial": 2
+    },
+    {
+      "assertion_score": 2,
+      "assertion_total": 8,
+      "assertions": {
+        "event_resume_handling": true,
+        "final_state": false,
+        "idempotency": false,
+        "retry_recovery": false,
+        "tool_arguments": false,
+        "tool_choice": false,
+        "tool_order": false,
+        "trace_completeness": true
+      },
+      "case_id": "retry_rate_limit_429",
+      "case_version": "1.0.0",
+      "description": "First order lookup is rate limited with HTTP 429.",
+      "diagnostics": {
+        "argument_checks": {
+          "get_refund_policy": false,
+          "issue_refund": false,
+          "lookup_order": false,
+          "notify_customer": false
+        },
+        "attempted_tools": [
+          "lookup_order"
+        ],
+        "completed": false,
+        "final_order": {
+          "amount": 120.0,
+          "currency": "USD",
+          "notifications": [],
+          "order_id": "ord-429",
+          "refund_effect_count": 0,
+          "refunded_amount": 0.0,
+          "status": "paid",
+          "version": 1
+        },
+        "retry_checks": {
+          "lookup_order": false
+        },
+        "successful_tool_order": []
+      },
+      "errors": [
+        {
+          "code": "429",
+          "message": "injected 429 on lookup_order",
+          "type": "RetryableToolError"
+        }
+      ],
+      "faults": [
+        {
+          "attempt": 1,
+          "kind": "429",
+          "tool": "lookup_order"
+        }
+      ],
+      "final_state": {
+        "checkpoints": {},
+        "idempotency_key_count": 0,
+        "order": {
+          "amount": 120.0,
+          "currency": "USD",
+          "notifications": [],
+          "order_id": "ord-429",
+          "refund_effect_count": 0,
+          "refunded_amount": 0.0,
+          "status": "paid",
+          "version": 1
+        },
+        "processed_events": []
+      },
+      "implementation": "unreliable",
+      "passed": false,
+      "seed": 1445376770,
+      "special_fault": null,
+      "telemetry": {
+        "cost_usd": 4e-05,
+        "latency_ms": 15,
+        "trace_event_count": 3
+      },
+      "trace": [
+        {
+          "args": null,
+          "attempt": null,
+          "case_id": "retry_rate_limit_429",
+          "cost_usd": 0.0,
+          "details": {
+            "implementation_note": "happy_path_only"
+          },
+          "elapsed_ms": 0,
+          "error_code": null,
+          "event_id": "evt-429",
+          "event_type": "agent_start",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 0,
+          "outcome": "ok",
+          "sequence": 1,
+          "tool": null,
+          "trial": 1
+        },
+        {
+          "args": {
+            "order_id": "ord-429"
+          },
+          "attempt": 1,
+          "case_id": "retry_rate_limit_429",
+          "cost_usd": 4e-05,
+          "details": {
+            "injected_fault": "429",
+            "phase": "before_execution"
+          },
+          "elapsed_ms": 15,
+          "error_code": "429",
+          "event_id": "evt-429",
+          "event_type": "tool_call",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 15,
+          "outcome": "error",
+          "sequence": 2,
+          "tool": "lookup_order",
+          "trial": 1
+        },
+        {
+          "args": null,
+          "attempt": null,
+          "case_id": "retry_rate_limit_429",
+          "cost_usd": 0.0,
+          "details": {
+            "code": "429",
+            "exception": "RetryableToolError"
+          },
+          "elapsed_ms": 15,
+          "error_code": null,
+          "event_id": "evt-429",
+          "event_type": "agent_error",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 0,
+          "outcome": "ok",
+          "sequence": 3,
+          "tool": null,
+          "trial": 1
+        }
+      ],
+      "trial": 1
+    },
+    {
+      "assertion_score": 2,
+      "assertion_total": 8,
+      "assertions": {
+        "event_resume_handling": true,
+        "final_state": false,
+        "idempotency": false,
+        "retry_recovery": false,
+        "tool_arguments": false,
+        "tool_choice": false,
+        "tool_order": false,
+        "trace_completeness": true
+      },
+      "case_id": "retry_rate_limit_429",
+      "case_version": "1.0.0",
+      "description": "First order lookup is rate limited with HTTP 429.",
+      "diagnostics": {
+        "argument_checks": {
+          "get_refund_policy": false,
+          "issue_refund": false,
+          "lookup_order": false,
+          "notify_customer": false
+        },
+        "attempted_tools": [
+          "lookup_order"
+        ],
+        "completed": false,
+        "final_order": {
+          "amount": 120.0,
+          "currency": "USD",
+          "notifications": [],
+          "order_id": "ord-429",
+          "refund_effect_count": 0,
+          "refunded_amount": 0.0,
+          "status": "paid",
+          "version": 1
+        },
+        "retry_checks": {
+          "lookup_order": false
+        },
+        "successful_tool_order": []
+      },
+      "errors": [
+        {
+          "code": "429",
+          "message": "injected 429 on lookup_order",
+          "type": "RetryableToolError"
+        }
+      ],
+      "faults": [
+        {
+          "attempt": 1,
+          "kind": "429",
+          "tool": "lookup_order"
+        }
+      ],
+      "final_state": {
+        "checkpoints": {},
+        "idempotency_key_count": 0,
+        "order": {
+          "amount": 120.0,
+          "currency": "USD",
+          "notifications": [],
+          "order_id": "ord-429",
+          "refund_effect_count": 0,
+          "refunded_amount": 0.0,
+          "status": "paid",
+          "version": 1
+        },
+        "processed_events": []
+      },
+      "implementation": "unreliable",
+      "passed": false,
+      "seed": 2606751893,
+      "special_fault": null,
+      "telemetry": {
+        "cost_usd": 4e-05,
+        "latency_ms": 15,
+        "trace_event_count": 3
+      },
+      "trace": [
+        {
+          "args": null,
+          "attempt": null,
+          "case_id": "retry_rate_limit_429",
+          "cost_usd": 0.0,
+          "details": {
+            "implementation_note": "happy_path_only"
+          },
+          "elapsed_ms": 0,
+          "error_code": null,
+          "event_id": "evt-429",
+          "event_type": "agent_start",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 0,
+          "outcome": "ok",
+          "sequence": 1,
+          "tool": null,
+          "trial": 2
+        },
+        {
+          "args": {
+            "order_id": "ord-429"
+          },
+          "attempt": 1,
+          "case_id": "retry_rate_limit_429",
+          "cost_usd": 4e-05,
+          "details": {
+            "injected_fault": "429",
+            "phase": "before_execution"
+          },
+          "elapsed_ms": 15,
+          "error_code": "429",
+          "event_id": "evt-429",
+          "event_type": "tool_call",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 15,
+          "outcome": "error",
+          "sequence": 2,
+          "tool": "lookup_order",
+          "trial": 2
+        },
+        {
+          "args": null,
+          "attempt": null,
+          "case_id": "retry_rate_limit_429",
+          "cost_usd": 0.0,
+          "details": {
+            "code": "429",
+            "exception": "RetryableToolError"
+          },
+          "elapsed_ms": 15,
+          "error_code": null,
+          "event_id": "evt-429",
+          "event_type": "agent_error",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 0,
+          "outcome": "ok",
+          "sequence": 3,
+          "tool": null,
+          "trial": 2
+        }
+      ],
+      "trial": 2
+    },
+    {
+      "assertion_score": 8,
+      "assertion_total": 8,
+      "assertions": {
+        "event_resume_handling": true,
+        "final_state": true,
+        "idempotency": true,
+        "retry_recovery": true,
+        "tool_arguments": true,
+        "tool_choice": true,
+        "tool_order": true,
+        "trace_completeness": true
+      },
+      "case_id": "retry_rate_limit_429",
+      "case_version": "1.0.0",
+      "description": "First order lookup is rate limited with HTTP 429.",
+      "diagnostics": {
+        "argument_checks": {
+          "get_refund_policy": true,
+          "issue_refund": true,
+          "lookup_order": true,
+          "notify_customer": true
+        },
+        "attempted_tools": [
+          "get_refund_policy",
+          "issue_refund",
+          "lookup_order",
+          "notify_customer"
+        ],
+        "completed": true,
+        "final_order": {
+          "amount": 120.0,
+          "currency": "USD",
+          "notifications": [
+            {
+              "channel": "email",
+              "message": "refund_confirmed"
+            }
+          ],
+          "order_id": "ord-429",
+          "refund_effect_count": 1,
+          "refunded_amount": 120.0,
+          "status": "refunded",
+          "version": 2
+        },
+        "retry_checks": {
+          "lookup_order": true
+        },
+        "successful_tool_order": [
+          "lookup_order",
+          "get_refund_policy",
+          "issue_refund",
+          "notify_customer"
+        ]
+      },
+      "errors": [],
+      "faults": [
+        {
+          "attempt": 1,
+          "kind": "429",
+          "tool": "lookup_order"
+        }
+      ],
+      "final_state": {
+        "checkpoints": {
+          "evt-429": {
+            "notification": {
+              "channel": "email",
+              "delivered": true,
+              "message": "refund_confirmed"
+            },
+            "order": {
+              "amount": 120.0,
+              "currency": "USD",
+              "order_id": "ord-429",
+              "status": "paid",
+              "version": 1
+            },
+            "policy": {
+              "currency": "USD",
+              "eligible": true,
+              "max_refund": 120.0,
+              "reason": "duplicate_order"
+            },
+            "refund": {
+              "amount": 120.0,
+              "currency": "USD",
+              "order_version": 2,
+              "refund_id": "refund-ord-429-1"
+            },
+            "stage": "complete"
+          }
+        },
+        "idempotency_key_count": 2,
+        "order": {
+          "amount": 120.0,
+          "currency": "USD",
+          "notifications": [
+            {
+              "channel": "email",
+              "message": "refund_confirmed"
+            }
+          ],
+          "order_id": "ord-429",
+          "refund_effect_count": 1,
+          "refunded_amount": 120.0,
+          "status": "refunded",
+          "version": 2
+        },
+        "processed_events": [
+          "evt-429"
+        ]
+      },
+      "implementation": "fixed",
+      "passed": true,
+      "seed": 1445376770,
+      "special_fault": null,
+      "telemetry": {
+        "cost_usd": 0.00025,
+        "latency_ms": 87,
+        "trace_event_count": 8
+      },
+      "trace": [
+        {
+          "args": null,
+          "attempt": null,
+          "case_id": "retry_rate_limit_429",
+          "cost_usd": 0.0,
+          "details": {},
+          "elapsed_ms": 0,
+          "error_code": null,
+          "event_id": "evt-429",
+          "event_type": "agent_start",
+          "idempotency_key": null,
+          "implementation": "fixed",
+          "latency_ms": 0,
+          "outcome": "ok",
+          "sequence": 1,
+          "tool": null,
+          "trial": 1
+        },
+        {
+          "args": {
+            "order_id": "ord-429"
+          },
+          "attempt": 1,
+          "case_id": "retry_rate_limit_429",
+          "cost_usd": 4e-05,
+          "details": {
+            "injected_fault": "429",
+            "phase": "before_execution"
+          },
+          "elapsed_ms": 15,
+          "error_code": "429",
+          "event_id": "evt-429",
+          "event_type": "tool_call",
+          "idempotency_key": null,
+          "implementation": "fixed",
+          "latency_ms": 15,
+          "outcome": "error",
+          "sequence": 2,
+          "tool": "lookup_order",
+          "trial": 1
+        },
+        {
+          "args": null,
+          "attempt": null,
+          "case_id": "retry_rate_limit_429",
+          "cost_usd": 0.0,
+          "details": {
+            "local_attempt": 1,
+            "reason": "429",
+            "tool": "lookup_order"
+          },
+          "elapsed_ms": 15,
+          "error_code": null,
+          "event_id": "evt-429",
+          "event_type": "retry_scheduled",
+          "idempotency_key": null,
+          "implementation": "fixed",
+          "latency_ms": 0,
+          "outcome": "ok",
+          "sequence": 3,
+          "tool": null,
+          "trial": 1
+        },
+        {
+          "args": {
+            "order_id": "ord-429"
+          },
+          "attempt": 2,
+          "case_id": "retry_rate_limit_429",
+          "cost_usd": 4e-05,
+          "details": {},
+          "elapsed_ms": 31,
+          "error_code": null,
+          "event_id": "evt-429",
+          "event_type": "tool_call",
+          "idempotency_key": null,
+          "implementation": "fixed",
+          "latency_ms": 16,
+          "outcome": "ok",
+          "sequence": 4,
+          "tool": "lookup_order",
+          "trial": 1
+        },
+        {
+          "args": {
+            "reason": "duplicate_order"
+          },
+          "attempt": 1,
+          "case_id": "retry_rate_limit_429",
+          "cost_usd": 3e-05,
+          "details": {},
+          "elapsed_ms": 42,
+          "error_code": null,
+          "event_id": "evt-429",
+          "event_type": "tool_call",
+          "idempotency_key": null,
+          "implementation": "fixed",
+          "latency_ms": 11,
+          "outcome": "ok",
+          "sequence": 5,
+          "tool": "get_refund_policy",
+          "trial": 1
+        },
+        {
+          "args": {
+            "amount": 120.0,
+            "currency": "USD",
+            "expected_version": 1,
+            "order_id": "ord-429"
+          },
+          "attempt": 1,
+          "case_id": "retry_rate_limit_429",
+          "cost_usd": 9e-05,
+          "details": {},
+          "elapsed_ms": 69,
+          "error_code": null,
+          "event_id": "evt-429",
+          "event_type": "tool_call",
+          "idempotency_key": "evt-429:refund",
+          "implementation": "fixed",
+          "latency_ms": 27,
+          "outcome": "ok",
+          "sequence": 6,
+          "tool": "issue_refund",
+          "trial": 1
+        },
+        {
+          "args": {
+            "channel": "email",
+            "order_id": "ord-429"
+          },
+          "attempt": 1,
+          "case_id": "retry_rate_limit_429",
+          "cost_usd": 5e-05,
+          "details": {},
+          "elapsed_ms": 87,
+          "error_code": null,
+          "event_id": "evt-429",
+          "event_type": "tool_call",
+          "idempotency_key": "evt-429:notification",
+          "implementation": "fixed",
+          "latency_ms": 18,
+          "outcome": "ok",
+          "sequence": 7,
+          "tool": "notify_customer",
+          "trial": 1
+        },
+        {
+          "args": null,
+          "attempt": null,
+          "case_id": "retry_rate_limit_429",
+          "cost_usd": 0.0,
+          "details": {},
+          "elapsed_ms": 87,
+          "error_code": null,
+          "event_id": "evt-429",
+          "event_type": "agent_complete",
+          "idempotency_key": null,
+          "implementation": "fixed",
+          "latency_ms": 0,
+          "outcome": "ok",
+          "sequence": 8,
+          "tool": null,
+          "trial": 1
+        }
+      ],
+      "trial": 1
+    },
+    {
+      "assertion_score": 8,
+      "assertion_total": 8,
+      "assertions": {
+        "event_resume_handling": true,
+        "final_state": true,
+        "idempotency": true,
+        "retry_recovery": true,
+        "tool_arguments": true,
+        "tool_choice": true,
+        "tool_order": true,
+        "trace_completeness": true
+      },
+      "case_id": "retry_rate_limit_429",
+      "case_version": "1.0.0",
+      "description": "First order lookup is rate limited with HTTP 429.",
+      "diagnostics": {
+        "argument_checks": {
+          "get_refund_policy": true,
+          "issue_refund": true,
+          "lookup_order": true,
+          "notify_customer": true
+        },
+        "attempted_tools": [
+          "get_refund_policy",
+          "issue_refund",
+          "lookup_order",
+          "notify_customer"
+        ],
+        "completed": true,
+        "final_order": {
+          "amount": 120.0,
+          "currency": "USD",
+          "notifications": [
+            {
+              "channel": "email",
+              "message": "refund_confirmed"
+            }
+          ],
+          "order_id": "ord-429",
+          "refund_effect_count": 1,
+          "refunded_amount": 120.0,
+          "status": "refunded",
+          "version": 2
+        },
+        "retry_checks": {
+          "lookup_order": true
+        },
+        "successful_tool_order": [
+          "lookup_order",
+          "get_refund_policy",
+          "issue_refund",
+          "notify_customer"
+        ]
+      },
+      "errors": [],
+      "faults": [
+        {
+          "attempt": 1,
+          "kind": "429",
+          "tool": "lookup_order"
+        }
+      ],
+      "final_state": {
+        "checkpoints": {
+          "evt-429": {
+            "notification": {
+              "channel": "email",
+              "delivered": true,
+              "message": "refund_confirmed"
+            },
+            "order": {
+              "amount": 120.0,
+              "currency": "USD",
+              "order_id": "ord-429",
+              "status": "paid",
+              "version": 1
+            },
+            "policy": {
+              "currency": "USD",
+              "eligible": true,
+              "max_refund": 120.0,
+              "reason": "duplicate_order"
+            },
+            "refund": {
+              "amount": 120.0,
+              "currency": "USD",
+              "order_version": 2,
+              "refund_id": "refund-ord-429-1"
+            },
+            "stage": "complete"
+          }
+        },
+        "idempotency_key_count": 2,
+        "order": {
+          "amount": 120.0,
+          "currency": "USD",
+          "notifications": [
+            {
+              "channel": "email",
+              "message": "refund_confirmed"
+            }
+          ],
+          "order_id": "ord-429",
+          "refund_effect_count": 1,
+          "refunded_amount": 120.0,
+          "status": "refunded",
+          "version": 2
+        },
+        "processed_events": [
+          "evt-429"
+        ]
+      },
+      "implementation": "fixed",
+      "passed": true,
+      "seed": 2606751893,
+      "special_fault": null,
+      "telemetry": {
+        "cost_usd": 0.00025,
+        "latency_ms": 87,
+        "trace_event_count": 8
+      },
+      "trace": [
+        {
+          "args": null,
+          "attempt": null,
+          "case_id": "retry_rate_limit_429",
+          "cost_usd": 0.0,
+          "details": {},
+          "elapsed_ms": 0,
+          "error_code": null,
+          "event_id": "evt-429",
+          "event_type": "agent_start",
+          "idempotency_key": null,
+          "implementation": "fixed",
+          "latency_ms": 0,
+          "outcome": "ok",
+          "sequence": 1,
+          "tool": null,
+          "trial": 2
+        },
+        {
+          "args": {
+            "order_id": "ord-429"
+          },
+          "attempt": 1,
+          "case_id": "retry_rate_limit_429",
+          "cost_usd": 4e-05,
+          "details": {
+            "injected_fault": "429",
+            "phase": "before_execution"
+          },
+          "elapsed_ms": 15,
+          "error_code": "429",
+          "event_id": "evt-429",
+          "event_type": "tool_call",
+          "idempotency_key": null,
+          "implementation": "fixed",
+          "latency_ms": 15,
+          "outcome": "error",
+          "sequence": 2,
+          "tool": "lookup_order",
+          "trial": 2
+        },
+        {
+          "args": null,
+          "attempt": null,
+          "case_id": "retry_rate_limit_429",
+          "cost_usd": 0.0,
+          "details": {
+            "local_attempt": 1,
+            "reason": "429",
+            "tool": "lookup_order"
+          },
+          "elapsed_ms": 15,
+          "error_code": null,
+          "event_id": "evt-429",
+          "event_type": "retry_scheduled",
+          "idempotency_key": null,
+          "implementation": "fixed",
+          "latency_ms": 0,
+          "outcome": "ok",
+          "sequence": 3,
+          "tool": null,
+          "trial": 2
+        },
+        {
+          "args": {
+            "order_id": "ord-429"
+          },
+          "attempt": 2,
+          "case_id": "retry_rate_limit_429",
+          "cost_usd": 4e-05,
+          "details": {},
+          "elapsed_ms": 31,
+          "error_code": null,
+          "event_id": "evt-429",
+          "event_type": "tool_call",
+          "idempotency_key": null,
+          "implementation": "fixed",
+          "latency_ms": 16,
+          "outcome": "ok",
+          "sequence": 4,
+          "tool": "lookup_order",
+          "trial": 2
+        },
+        {
+          "args": {
+            "reason": "duplicate_order"
+          },
+          "attempt": 1,
+          "case_id": "retry_rate_limit_429",
+          "cost_usd": 3e-05,
+          "details": {},
+          "elapsed_ms": 42,
+          "error_code": null,
+          "event_id": "evt-429",
+          "event_type": "tool_call",
+          "idempotency_key": null,
+          "implementation": "fixed",
+          "latency_ms": 11,
+          "outcome": "ok",
+          "sequence": 5,
+          "tool": "get_refund_policy",
+          "trial": 2
+        },
+        {
+          "args": {
+            "amount": 120.0,
+            "currency": "USD",
+            "expected_version": 1,
+            "order_id": "ord-429"
+          },
+          "attempt": 1,
+          "case_id": "retry_rate_limit_429",
+          "cost_usd": 9e-05,
+          "details": {},
+          "elapsed_ms": 69,
+          "error_code": null,
+          "event_id": "evt-429",
+          "event_type": "tool_call",
+          "idempotency_key": "evt-429:refund",
+          "implementation": "fixed",
+          "latency_ms": 27,
+          "outcome": "ok",
+          "sequence": 6,
+          "tool": "issue_refund",
+          "trial": 2
+        },
+        {
+          "args": {
+            "channel": "email",
+            "order_id": "ord-429"
+          },
+          "attempt": 1,
+          "case_id": "retry_rate_limit_429",
+          "cost_usd": 5e-05,
+          "details": {},
+          "elapsed_ms": 87,
+          "error_code": null,
+          "event_id": "evt-429",
+          "event_type": "tool_call",
+          "idempotency_key": "evt-429:notification",
+          "implementation": "fixed",
+          "latency_ms": 18,
+          "outcome": "ok",
+          "sequence": 7,
+          "tool": "notify_customer",
+          "trial": 2
+        },
+        {
+          "args": null,
+          "attempt": null,
+          "case_id": "retry_rate_limit_429",
+          "cost_usd": 0.0,
+          "details": {},
+          "elapsed_ms": 87,
+          "error_code": null,
+          "event_id": "evt-429",
+          "event_type": "agent_complete",
+          "idempotency_key": null,
+          "implementation": "fixed",
+          "latency_ms": 0,
+          "outcome": "ok",
+          "sequence": 8,
+          "tool": null,
+          "trial": 2
+        }
+      ],
+      "trial": 2
+    },
+    {
+      "assertion_score": 5,
+      "assertion_total": 8,
+      "assertions": {
+        "event_resume_handling": false,
+        "final_state": false,
+        "idempotency": false,
+        "retry_recovery": true,
+        "tool_arguments": true,
+        "tool_choice": true,
+        "tool_order": true,
+        "trace_completeness": true
+      },
+      "case_id": "duplicate_event",
+      "case_version": "1.0.0",
+      "description": "The same delivery event is received twice.",
+      "diagnostics": {
+        "argument_checks": {
+          "get_refund_policy": true,
+          "issue_refund": true,
+          "lookup_order": true,
+          "notify_customer": true
+        },
+        "attempted_tools": [
+          "get_refund_policy",
+          "issue_refund",
+          "lookup_order",
+          "notify_customer"
+        ],
+        "completed": true,
+        "final_order": {
+          "amount": 120.0,
+          "currency": "USD",
+          "notifications": [
+            {
+              "channel": "email",
+              "message": "refund_confirmed"
+            },
+            {
+              "channel": "email",
+              "message": "refund_confirmed"
+            }
+          ],
+          "order_id": "ord-duplicate",
+          "refund_effect_count": 2,
+          "refunded_amount": 240.0,
+          "status": "refunded",
+          "version": 3
+        },
+        "retry_checks": {},
+        "successful_tool_order": [
+          "lookup_order",
+          "get_refund_policy",
+          "issue_refund",
+          "notify_customer",
+          "lookup_order",
+          "get_refund_policy",
+          "issue_refund",
+          "notify_customer"
+        ]
+      },
+      "errors": [],
+      "faults": [],
+      "final_state": {
+        "checkpoints": {},
+        "idempotency_key_count": 0,
+        "order": {
+          "amount": 120.0,
+          "currency": "USD",
+          "notifications": [
+            {
+              "channel": "email",
+              "message": "refund_confirmed"
+            },
+            {
+              "channel": "email",
+              "message": "refund_confirmed"
+            }
+          ],
+          "order_id": "ord-duplicate",
+          "refund_effect_count": 2,
+          "refunded_amount": 240.0,
+          "status": "refunded",
+          "version": 3
+        },
+        "processed_events": []
+      },
+      "implementation": "unreliable",
+      "passed": false,
+      "seed": 2092138517,
+      "special_fault": "duplicate_event",
+      "telemetry": {
+        "cost_usd": 0.00042,
+        "latency_ms": 146,
+        "trace_event_count": 12
+      },
+      "trace": [
+        {
+          "args": null,
+          "attempt": null,
+          "case_id": "duplicate_event",
+          "cost_usd": 0.0,
+          "details": {
+            "implementation_note": "happy_path_only"
+          },
+          "elapsed_ms": 0,
+          "error_code": null,
+          "event_id": "evt-duplicate",
+          "event_type": "agent_start",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 0,
+          "outcome": "ok",
+          "sequence": 1,
+          "tool": null,
+          "trial": 1
+        },
+        {
+          "args": {
+            "order_id": "ord-duplicate"
+          },
+          "attempt": 1,
+          "case_id": "duplicate_event",
+          "cost_usd": 4e-05,
+          "details": {},
+          "elapsed_ms": 15,
+          "error_code": null,
+          "event_id": "evt-duplicate",
+          "event_type": "tool_call",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 15,
+          "outcome": "ok",
+          "sequence": 2,
+          "tool": "lookup_order",
+          "trial": 1
+        },
+        {
+          "args": {
+            "reason": "duplicate_order"
+          },
+          "attempt": 1,
+          "case_id": "duplicate_event",
+          "cost_usd": 3e-05,
+          "details": {},
+          "elapsed_ms": 26,
+          "error_code": null,
+          "event_id": "evt-duplicate",
+          "event_type": "tool_call",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 11,
+          "outcome": "ok",
+          "sequence": 3,
+          "tool": "get_refund_policy",
+          "trial": 1
+        },
+        {
+          "args": {
+            "amount": 120.0,
+            "currency": "USD",
+            "order_id": "ord-duplicate"
+          },
+          "attempt": 1,
+          "case_id": "duplicate_event",
+          "cost_usd": 9e-05,
+          "details": {},
+          "elapsed_ms": 53,
+          "error_code": null,
+          "event_id": "evt-duplicate",
+          "event_type": "tool_call",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 27,
+          "outcome": "ok",
+          "sequence": 4,
+          "tool": "issue_refund",
+          "trial": 1
+        },
+        {
+          "args": {
+            "channel": "email",
+            "order_id": "ord-duplicate"
+          },
+          "attempt": 1,
+          "case_id": "duplicate_event",
+          "cost_usd": 5e-05,
+          "details": {},
+          "elapsed_ms": 71,
+          "error_code": null,
+          "event_id": "evt-duplicate",
+          "event_type": "tool_call",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 18,
+          "outcome": "ok",
+          "sequence": 5,
+          "tool": "notify_customer",
+          "trial": 1
+        },
+        {
+          "args": null,
+          "attempt": null,
+          "case_id": "duplicate_event",
+          "cost_usd": 0.0,
+          "details": {},
+          "elapsed_ms": 71,
+          "error_code": null,
+          "event_id": "evt-duplicate",
+          "event_type": "agent_complete",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 0,
+          "outcome": "ok",
+          "sequence": 6,
+          "tool": null,
+          "trial": 1
+        },
+        {
+          "args": null,
+          "attempt": null,
+          "case_id": "duplicate_event",
+          "cost_usd": 0.0,
+          "details": {
+            "implementation_note": "happy_path_only"
+          },
+          "elapsed_ms": 71,
+          "error_code": null,
+          "event_id": "evt-duplicate",
+          "event_type": "agent_start",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 0,
+          "outcome": "ok",
+          "sequence": 7,
+          "tool": null,
+          "trial": 1
+        },
+        {
+          "args": {
+            "order_id": "ord-duplicate"
+          },
+          "attempt": 2,
+          "case_id": "duplicate_event",
+          "cost_usd": 4e-05,
+          "details": {},
+          "elapsed_ms": 87,
+          "error_code": null,
+          "event_id": "evt-duplicate",
+          "event_type": "tool_call",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 16,
+          "outcome": "ok",
+          "sequence": 8,
+          "tool": "lookup_order",
+          "trial": 1
+        },
+        {
+          "args": {
+            "reason": "duplicate_order"
+          },
+          "attempt": 2,
+          "case_id": "duplicate_event",
+          "cost_usd": 3e-05,
+          "details": {},
+          "elapsed_ms": 99,
+          "error_code": null,
+          "event_id": "evt-duplicate",
+          "event_type": "tool_call",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 12,
+          "outcome": "ok",
+          "sequence": 9,
+          "tool": "get_refund_policy",
+          "trial": 1
+        },
+        {
+          "args": {
+            "amount": 120.0,
+            "currency": "USD",
+            "order_id": "ord-duplicate"
+          },
+          "attempt": 2,
+          "case_id": "duplicate_event",
+          "cost_usd": 9e-05,
+          "details": {},
+          "elapsed_ms": 127,
+          "error_code": null,
+          "event_id": "evt-duplicate",
+          "event_type": "tool_call",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 28,
+          "outcome": "ok",
+          "sequence": 10,
+          "tool": "issue_refund",
+          "trial": 1
+        },
+        {
+          "args": {
+            "channel": "email",
+            "order_id": "ord-duplicate"
+          },
+          "attempt": 2,
+          "case_id": "duplicate_event",
+          "cost_usd": 5e-05,
+          "details": {},
+          "elapsed_ms": 146,
+          "error_code": null,
+          "event_id": "evt-duplicate",
+          "event_type": "tool_call",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 19,
+          "outcome": "ok",
+          "sequence": 11,
+          "tool": "notify_customer",
+          "trial": 1
+        },
+        {
+          "args": null,
+          "attempt": null,
+          "case_id": "duplicate_event",
+          "cost_usd": 0.0,
+          "details": {},
+          "elapsed_ms": 146,
+          "error_code": null,
+          "event_id": "evt-duplicate",
+          "event_type": "agent_complete",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 0,
+          "outcome": "ok",
+          "sequence": 12,
+          "tool": null,
+          "trial": 1
+        }
+      ],
+      "trial": 1
+    },
+    {
+      "assertion_score": 5,
+      "assertion_total": 8,
+      "assertions": {
+        "event_resume_handling": false,
+        "final_state": false,
+        "idempotency": false,
+        "retry_recovery": true,
+        "tool_arguments": true,
+        "tool_choice": true,
+        "tool_order": true,
+        "trace_completeness": true
+      },
+      "case_id": "duplicate_event",
+      "case_version": "1.0.0",
+      "description": "The same delivery event is received twice.",
+      "diagnostics": {
+        "argument_checks": {
+          "get_refund_policy": true,
+          "issue_refund": true,
+          "lookup_order": true,
+          "notify_customer": true
+        },
+        "attempted_tools": [
+          "get_refund_policy",
+          "issue_refund",
+          "lookup_order",
+          "notify_customer"
+        ],
+        "completed": true,
+        "final_order": {
+          "amount": 120.0,
+          "currency": "USD",
+          "notifications": [
+            {
+              "channel": "email",
+              "message": "refund_confirmed"
+            },
+            {
+              "channel": "email",
+              "message": "refund_confirmed"
+            }
+          ],
+          "order_id": "ord-duplicate",
+          "refund_effect_count": 2,
+          "refunded_amount": 240.0,
+          "status": "refunded",
+          "version": 3
+        },
+        "retry_checks": {},
+        "successful_tool_order": [
+          "lookup_order",
+          "get_refund_policy",
+          "issue_refund",
+          "notify_customer",
+          "lookup_order",
+          "get_refund_policy",
+          "issue_refund",
+          "notify_customer"
+        ]
+      },
+      "errors": [],
+      "faults": [],
+      "final_state": {
+        "checkpoints": {},
+        "idempotency_key_count": 0,
+        "order": {
+          "amount": 120.0,
+          "currency": "USD",
+          "notifications": [
+            {
+              "channel": "email",
+              "message": "refund_confirmed"
+            },
+            {
+              "channel": "email",
+              "message": "refund_confirmed"
+            }
+          ],
+          "order_id": "ord-duplicate",
+          "refund_effect_count": 2,
+          "refunded_amount": 240.0,
+          "status": "refunded",
+          "version": 3
+        },
+        "processed_events": []
+      },
+      "implementation": "unreliable",
+      "passed": false,
+      "seed": 3352411101,
+      "special_fault": "duplicate_event",
+      "telemetry": {
+        "cost_usd": 0.00042,
+        "latency_ms": 130,
+        "trace_event_count": 12
+      },
+      "trace": [
+        {
+          "args": null,
+          "attempt": null,
+          "case_id": "duplicate_event",
+          "cost_usd": 0.0,
+          "details": {
+            "implementation_note": "happy_path_only"
+          },
+          "elapsed_ms": 0,
+          "error_code": null,
+          "event_id": "evt-duplicate",
+          "event_type": "agent_start",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 0,
+          "outcome": "ok",
+          "sequence": 1,
+          "tool": null,
+          "trial": 2
+        },
+        {
+          "args": {
+            "order_id": "ord-duplicate"
+          },
+          "attempt": 1,
+          "case_id": "duplicate_event",
+          "cost_usd": 4e-05,
+          "details": {},
+          "elapsed_ms": 13,
+          "error_code": null,
+          "event_id": "evt-duplicate",
+          "event_type": "tool_call",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 13,
+          "outcome": "ok",
+          "sequence": 2,
+          "tool": "lookup_order",
+          "trial": 2
+        },
+        {
+          "args": {
+            "reason": "duplicate_order"
+          },
+          "attempt": 1,
+          "case_id": "duplicate_event",
+          "cost_usd": 3e-05,
+          "details": {},
+          "elapsed_ms": 22,
+          "error_code": null,
+          "event_id": "evt-duplicate",
+          "event_type": "tool_call",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 9,
+          "outcome": "ok",
+          "sequence": 3,
+          "tool": "get_refund_policy",
+          "trial": 2
+        },
+        {
+          "args": {
+            "amount": 120.0,
+            "currency": "USD",
+            "order_id": "ord-duplicate"
+          },
+          "attempt": 1,
+          "case_id": "duplicate_event",
+          "cost_usd": 9e-05,
+          "details": {},
+          "elapsed_ms": 47,
+          "error_code": null,
+          "event_id": "evt-duplicate",
+          "event_type": "tool_call",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 25,
+          "outcome": "ok",
+          "sequence": 4,
+          "tool": "issue_refund",
+          "trial": 2
+        },
+        {
+          "args": {
+            "channel": "email",
+            "order_id": "ord-duplicate"
+          },
+          "attempt": 1,
+          "case_id": "duplicate_event",
+          "cost_usd": 5e-05,
+          "details": {},
+          "elapsed_ms": 63,
+          "error_code": null,
+          "event_id": "evt-duplicate",
+          "event_type": "tool_call",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 16,
+          "outcome": "ok",
+          "sequence": 5,
+          "tool": "notify_customer",
+          "trial": 2
+        },
+        {
+          "args": null,
+          "attempt": null,
+          "case_id": "duplicate_event",
+          "cost_usd": 0.0,
+          "details": {},
+          "elapsed_ms": 63,
+          "error_code": null,
+          "event_id": "evt-duplicate",
+          "event_type": "agent_complete",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 0,
+          "outcome": "ok",
+          "sequence": 6,
+          "tool": null,
+          "trial": 2
+        },
+        {
+          "args": null,
+          "attempt": null,
+          "case_id": "duplicate_event",
+          "cost_usd": 0.0,
+          "details": {
+            "implementation_note": "happy_path_only"
+          },
+          "elapsed_ms": 63,
+          "error_code": null,
+          "event_id": "evt-duplicate",
+          "event_type": "agent_start",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 0,
+          "outcome": "ok",
+          "sequence": 7,
+          "tool": null,
+          "trial": 2
+        },
+        {
+          "args": {
+            "order_id": "ord-duplicate"
+          },
+          "attempt": 2,
+          "case_id": "duplicate_event",
+          "cost_usd": 4e-05,
+          "details": {},
+          "elapsed_ms": 77,
+          "error_code": null,
+          "event_id": "evt-duplicate",
+          "event_type": "tool_call",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 14,
+          "outcome": "ok",
+          "sequence": 8,
+          "tool": "lookup_order",
+          "trial": 2
+        },
+        {
+          "args": {
+            "reason": "duplicate_order"
+          },
+          "attempt": 2,
+          "case_id": "duplicate_event",
+          "cost_usd": 3e-05,
+          "details": {},
+          "elapsed_ms": 87,
+          "error_code": null,
+          "event_id": "evt-duplicate",
+          "event_type": "tool_call",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 10,
+          "outcome": "ok",
+          "sequence": 9,
+          "tool": "get_refund_policy",
+          "trial": 2
+        },
+        {
+          "args": {
+            "amount": 120.0,
+            "currency": "USD",
+            "order_id": "ord-duplicate"
+          },
+          "attempt": 2,
+          "case_id": "duplicate_event",
+          "cost_usd": 9e-05,
+          "details": {},
+          "elapsed_ms": 113,
+          "error_code": null,
+          "event_id": "evt-duplicate",
+          "event_type": "tool_call",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 26,
+          "outcome": "ok",
+          "sequence": 10,
+          "tool": "issue_refund",
+          "trial": 2
+        },
+        {
+          "args": {
+            "channel": "email",
+            "order_id": "ord-duplicate"
+          },
+          "attempt": 2,
+          "case_id": "duplicate_event",
+          "cost_usd": 5e-05,
+          "details": {},
+          "elapsed_ms": 130,
+          "error_code": null,
+          "event_id": "evt-duplicate",
+          "event_type": "tool_call",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 17,
+          "outcome": "ok",
+          "sequence": 11,
+          "tool": "notify_customer",
+          "trial": 2
+        },
+        {
+          "args": null,
+          "attempt": null,
+          "case_id": "duplicate_event",
+          "cost_usd": 0.0,
+          "details": {},
+          "elapsed_ms": 130,
+          "error_code": null,
+          "event_id": "evt-duplicate",
+          "event_type": "agent_complete",
+          "idempotency_key": null,
+          "implementation": "unreliable",
+          "latency_ms": 0,
+          "outcome": "ok",
+          "sequence": 12,
+          "tool": null,
+          "trial": 2
+        }
+      ],
+      "trial": 2
+    },
+    {
+      "assertion_score": 8,
+      "assertion_total": 8,
+      "assertions": {
+        "event_resume_handling": true,
+        "final_state": true,
+        "idempotency": true,
+        "retry_recovery": true,
+        "tool_arguments": true,
+        "tool_choice": true,
+        "tool_order": true,
+        "trace_completeness": true
+      },
+      "case_id": "duplicate_event",
+      "case_version": "1.0.0",
+      "description": "The same delivery event is received twice.",
+      "diagnostics": {
+        "argument_checks": {
+          "get_refund_policy": true,
+          "issue_refund": true,
+          "lookup_order": true,
+          "notify_customer": true
+        },
+        "attempted_tools": [
+          "get_refund_policy",
+          "issue_refund",
+          "lookup_order",
+          "notify_customer"
+        ],
+        "completed": true,
+        "final_order": {
+          "amount": 120.0,
+          "currency": "USD",
+          "notifications": [
+            {
+              "channel": "email",
+              "message": "refund_confirmed"
+            }
+          ],
+          "order_id": "ord-duplicate",
+          "refund_effect_count": 1,
+          "refunded_amount": 120.0,
+          "status": "refunded",
+          "version": 2
+        },
+        "retry_checks": {},
+        "successful_tool_order": [
+          "lookup_order",
+          "get_refund_policy",
+          "issue_refund",
+          "notify_customer"
+        ]
+      },
+      "errors": [],
+      "faults": [],
+      "final_state": {
+        "checkpoints": {
+          "evt-duplicate": {
+            "notification": {
+              "channel": "email",
+              "delivered": true,
+              "message": "refund_confirmed"
+            },
+            "order": {
+              "amount": 120.0,
+              "currency": "USD",
+              "order_id": "ord-duplicate",
+              "status": "paid",
+              "version": 1
+            },
+            "policy": {
+              "currency": "USD",
+              "eligible": true,
+              "max_refund": 120.0,
+              "reason": "duplicate_order"
+            },
+            "refund": {
+              "amount": 120.0,
+              "currency": "USD",
+              "order_version": 2,
+              "refund_id": "refund-ord-duplicate-1"
+            },
+            "stage": "complete"
+          }
+        },
+        "idempotency_key_count": 2,
+        "order": {
+          "amount": 120.0,
+          "currency": "USD",
+          "notifications": [
+            {
+              "channel": "email",
+              "message": "refund_confirmed"
+            }
+          ],
+          "order_id": "ord-duplicate",
+          "refund_effect_count": 1,
+          "refunded_amount": 120.0,
+          "status": "refunded",
+          "version": 2
+        },
+        "processed_events": [
+          "evt-duplicate"
+        ]
+      },
+      "implementation": "fixed",
+      "passed": true,
+      "seed": 2092138517,
+      "special_fault": "duplicate_event",
+      "telemetry": {
+        "cost_usd": 0.00021,
+        "latency_ms": 71,
+        "trace_event_count": 7
+      },
+      "trace": [
+        {
+          "args": null,
+          "attempt": null,
+          "case_id": "duplicate_event",
+          "cost_usd": 0.0,
+          "details": {},
+          "elapsed_ms": 0,
+          "error_code": null,
+          "event_id": "evt-duplicate",
+          "event_type": "agent_start",
+          "idempotency_key": null,
+          "implementation": "fixed",
+          "latency_ms": 0,
+          "outcome": "ok",
+          "sequence": 1,
+          "tool": null,
+          "trial": 1
+        },
+        {
+          "args": {
+            "order_id": "ord-duplicate"
+          },
+          "attempt": 1,
+          "case_id": "duplicate_event",
+          "cost_usd": 4e-05,
+          "details": {},
+          "elapsed_ms": 15,
+          "error_code": null,
+          "event_id": "evt-duplicate",
+          "event_type": "tool_call",
+          "idempotency_key": null,
+          "implementation": "fixed",
+          "latency_ms": 15,
+          "outcome": "ok",
+          "sequence": 2,
+          "tool": "lookup_order",
+          "trial": 1
+        },
+        {
+          "args": {
+            "reason": "duplicate_order"
+          },
+          "attempt": 1,
+          "case_id": "duplicate_event",
+          "cost_usd": 3e-05,
+          "details": {},
+          "elapsed_ms": 26,
+          "error_code": null,
+          "event_id": "evt-duplicate",
+          "event_type": "tool_call",
+          "idempotency_key": null,
+          "implementation": "fixed",
+          "latency_ms": 11,
+          "outcome": "ok",
+          "sequence": 3,
+          "tool": "get_refund_policy",
+          "trial": 1
+        },
+        {
+          "args": {
+            "amount": 120.0,
+            "currency": "USD",
+            "expected_version": 1,
+            "order_id": "ord-duplicate"
+          },
+          "attempt": 1,
+          "case_id": "duplicate_event",
+          "cost_usd": 9e-05,
+          "details": {},
+          "elapsed_ms": 53,
+          "error_code": null,
+          "event_id": "evt-duplicate",
+          "event_type": "tool_call",
+          "idempotency_key": "evt-duplicate:refund",
+          "implementation": "fixed",
+          "latency_ms": 27,
+          "outcome": "ok",
+          "sequence": 4,
+          "tool": "issue_refund",
+          "trial": 1
+        },
+        {
+          "args": {
+            "channel": "email",
+            "order_id": "ord-duplicate"
+          },
+          "attempt": 1,
+          "case_id": "duplicate_event",
+          "cost_usd": 5e-05,
+          "details": {},
+          "elapsed_ms": 71,
+          "error_code": null,
+          "event_id": "evt-duplicate",
+          "event_type": "tool_call",
+          "idempotency_key": "evt-duplicate:notification",
+          "implementation": "fixed",
+          "latency_ms": 18,
+          "outcome": "ok",
+          "sequence": 5,
+          "tool": "notify_customer",
+          "trial": 1
+        },
+        {
+          "args": null,
+          "attempt": null,
+          "case_id": "duplicate_event",
+          "cost_usd": 0.0,
+          "details": {},
+          "elapsed_ms": 71,
+          "error_code": null,
+          "event_id": "evt-duplicate",
+          "event_type": "agent_complete",
+          "idempotency_key": null,
+          "implementation": "fixed",
+          "latency_ms": 0,
+          "outcome": "ok",
+          "sequence": 6,
+          "tool": null,
+          "trial": 1
+        },
+        {
+          "args": null,
+          "attempt": null,
+          "case_id": "duplicate_event",
+          "cost_usd": 0.0,
+          "details": {},
+          "elapsed_ms": 71,
+          "error_code": null,
+          "event_id": "evt-duplicate",
+          "event_type": "duplicate_ignored",
+          "idempotency_key": null,
+          "implementation": "fixed",
+          "latency_ms": 0,
+          "outcome": "ok",
+          "sequence": 7,
+          "tool": null,
+          "trial": 1
+        }
+      ],
+      "trial": 1
+    },
+    {
+      "assertion_score": 8,
+      "assertion_total": 8,
+      "assertions": {
+        "event_resume_handling": true,
+        "final_state": true,
+        "idempotency": true,
+        "retry_recovery": true,
+        "tool_arguments": true,
+        "tool_choice": true,
+        "tool_order": true,
+        "trace_completeness": true
+      },
+      "case_id": "duplicate_event",
+      "case_version": "1.0.0",
+      "description": "The same delivery event is received twice.",
+      "diagnostics": {
+        "argument_checks": {
+          "get_refund_policy": true,
+          "issue_refund": true,
+          "lookup_order": true,
+          "notify_customer": true
+        },
+        "attempted_tools": [
+          "get_refund_policy",
+          "issue_refund",
+          "lookup_order",
+          "notify_customer"
+        ],
+        "completed": true,
+        "final_order": {
+          "amount": 120.0,
+          "currency": "USD",
+          "notifications": [
+            {
+              "channel": "email",
+              "message": "refund_confirmed"
+            }
+          ],
+          "order_id": "ord-duplicate",
+          "refund_effect_count": 1,
+          "refunded_amount": 120.0,
+          "status": "refunded",
+          "version": 2
+        },
+        "retry_checks": {},
+        "successful_tool_order": [
+          "lookup_order",
+          "get_refund_policy",
+          "issue_refund",
+          "notify_customer"
+        ]
+      },
+      "errors": [],
+      "faults": [],
+      "final_state": {
+        "checkpoints": {
+          "evt-duplicate": {
+            "notification": {
+              "channel": "email",
+              "delivered": true,
+              "message": "refund_confirmed"
+            },
+            "order": {
+              "amount": 120.0,
+              "currency": "USD",
+              "order_id": "ord-duplicate",
+              "status": "paid",
+              "version": 1
+            },
+            "policy": {
+              "currency": "USD",
+              "eligible": true,
+              "max_refund": 120.0,
+              "reason": "duplicate_order"
+            },
+            "refund": {
+              "amount": 120.0,
+              "currency": "USD",
+              "order_version": 2,
+              "refund_id": "refund-ord-duplicate-1"
+            },
+            "stage": "complete"
+          }
+        },
+        "idempotency_key_count": 2,
+        "order": {
+          "amount": 120.0,
+          "currency": "USD",
+          "notifications": [
+            {
+              "channel": "email",
+              "message": "refund_confirmed"
+            }
+          ],
+          "order_id": "ord-duplicate",
+          "refund_effect_count": 1,
+          "refunded_amount": 120.0,
+          "status": "refunded",
+          "version": 2
+        },
+        "processed_events": [
+          "evt-duplicate"
+        ]
+      },
+      "implementation": "fixed",
+      "passed": true,
+      "seed": 3352411101,
+      "special_fault": "duplicate_event",
+      "telemetry": {
+        "cost_usd": 0.00021,
+        "latency_ms": 63,
+        "trace_event_count": 7
+      },
+      "trace": [
+        {
+          "args": null,
+          "attempt": null,
+          "case_id": "duplicate_event",
+          "cost_usd": 0.0,
+          "details": {},
+          "elapsed_ms": 0,
+          "error_code": null,
+          "event_id": "evt-duplicate",
+          "event_type": "agent_start",
+          "idempotency_key": null,
+          "implementation": "fixed",
+          "latency_ms": 0,
+          "outcome": "ok",
+          "sequence": 1,
+          "tool": null,
+          "trial": 2
+        },
+        {
+          "args": {
+            "order_id": "ord-duplicate"
+          },
+          "attempt": 1,
+          "case_id": "duplicate_event",
+          "cost_usd": 4e-05,
+          "details": {},
+          "elapsed_ms": 13,
+          "error_code": null,
+          "event_id": "evt-duplicate",
+          "event_type": "tool_call",
+          "idempotency_key": null,
+          "implementation": "fixed",
+          "latency_ms": 13,
+          "outcome": "ok",
+          "sequence": 2,
+          "tool": "lookup_order",
+          "trial": 2
+        },
+        {
+          "args": {
+            "reason": "duplicate_order"
+          },
+          "attempt": 1,
+          "case_id": "duplicate_event",
+          "cost_usd": 3e-05,
+          "details": {},
+          "elapsed_ms": 22,
+          "error_code": null,
+          "event_id": "evt-duplicate",
+          "event_type": "tool_call",
+          "idempotency_key": null,
+          "implementation": "fixed",
+          "latency_ms": 9,
+          "outcome": "ok",
+          "sequence": 3,
+          "tool": "get_refund_policy",
+          "trial": 2
+        },
+        {
+          "args": {
+            "amount": 120.0,
+            "currency": "USD",
+            "expected_version": 1,
+            "order_id": "ord-duplicate"
+          },
+          "attempt": 1,
+          "case_id": "duplicate_event",
+          "cost_usd": 9e-05,
+          "details": {},
+          "elapsed_ms": 47,
+          "error_code": null,
+          "event_id": "evt-duplicate",
+          "event_type": "tool_call",
+          "idempotency_key": "evt-duplicate:refund",
+          "implementation": "fixed",
+          "latency_ms": 25,
+          "outcome": "ok",
+          "sequence": 4,
+          "tool": "issue_refund",
+          "trial": 2
+        },
+        {
+          "args": {
+            "channel": "email",
+            "order_id": "ord-duplicate"
+          },
+          "attempt": 1,
+          "case_id": "duplicate_event",
+          "cost_usd": 5e-05,
+          "details": {},
+          "elapsed_ms": 63,
+          "error_code": null,
+          "event_id": "evt-duplicate",
+          "event_type": "tool_call",
+          "idempotency_key": "evt-duplicate:notification",
+          "implementation": "fixed",
+          "latency_ms": 16,
+          "outcome": "ok",
+          "sequence": 5,
+          "tool": "notify_customer",
+          "trial": 2
+        },
+        {
+          "args": null,
+          "attempt": null,
+          "case_id": "duplicate_event",
+          "cost_usd": 0.0,
+          "details": {},
+          "elapsed_ms": 63,
+          "error_code": null,
+          "event_id": "evt-duplicate",
+          "event_type": "agent_complete",
+          "idempotency_key": null,
+          "implementation": "fixed",
+          "latency_ms": 0,
+          "outcome": "ok",
+          "sequence": 6,
+          "tool": null,
+          "trial": 2
+        },
+        {
+          "args": null,
+          "attempt": null,
+          "case_id": "duplicate_event",
+          "cost_usd": 0.0,
+          "details": {},
+          "elapsed_ms": 63,
+          "error_code": null,
+          "event_id": "evt-duplicate",
+          "event_type": "duplicate_ignored",
+          "idempotency_key": null,
+          "implementation": "fixed",
+          "latency_ms": 0,
+          "outcome": "ok",
+          "sequence": 7,
+          "tool": null,
+          "trial": 2
+        }
+      ],
+      "trial": 2
+    }
+  ],
+  "suite": "smoke",
+  "summary": {
+    "fixed": {
+      "assertions_passed": 48,
+      "assertions_total": 48,
+      "completion_rate_percent": 100.0,
+      "cost_usd": 0.00134,
+      "label": "AFTER \u2014 fixed sample",
+      "latency_ms": 446,
+      "score_percent": 100.0,
+      "trial_pass_rate_percent": 100.0,
+      "trials_passed": 6,
+      "trials_total": 6
+    },
+    "improvement": {
+      "assertion_score_delta_points": 37.5,
+      "trial_pass_rate_delta_points": 66.67
+    },
+    "unreliable": {
+      "assertions_passed": 30,
+      "assertions_total": 48,
+      "completion_rate_percent": 66.67,
+      "cost_usd": 0.00134,
+      "label": "BEFORE \u2014 deliberately unreliable sample",
+      "latency_ms": 444,
+      "score_percent": 62.5,
+      "trial_pass_rate_percent": 33.33,
+      "trials_passed": 2,
+      "trials_total": 6
+    }
+  },
+  "trials_per_case": 2
+}

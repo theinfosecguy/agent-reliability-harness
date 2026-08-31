@@ -1,0 +1,17 @@
+[project]
+name = "sample-agent-reliability-harness"
+version = "0.1.0"
+description = "Deterministic, dependency-free proof asset for tool-using AI agent reliability evaluation"
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.10"
+
+[project.scripts]
+agent-reliability-demo = "reliability_harness.__main__:main"
+
+[tool.setuptools.package-data]
+reliability_harness = ["casepacks/*.json"]
+
+[tool.setuptools.packages.find]
+include = ["reliability_harness*"]
+exclude = ["reports*", "tests*"]
