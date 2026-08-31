@@ -18,6 +18,21 @@
     "fixed"
   ],
   "label": "SAMPLE/DEMO \u2014 deterministic AI-agent reliability scorecard",
+  "release_gate": {
+    "checks": {
+      "assertion_score": {
+        "actual_percent": 100.0,
+        "minimum_percent": 100.0,
+        "passed": true
+      },
+      "fully_passing_trials": {
+        "actual_percent": 100.0,
+        "minimum_percent": 100.0,
+        "passed": true
+      }
+    },
+    "passed": true
+  },
   "report_schema_version": "1.0",
   "results": [
     {

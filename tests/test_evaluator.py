@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import unittest
 
-from reliability_harness.evaluator import ASSERTION_NAMES, evaluate
+from reliability_harness.evaluator import ASSERTION_NAMES, _release_gate, evaluate
 
 
 class EvaluatorTests(unittest.TestCase):
@@ -16,7 +16,9 @@ class EvaluatorTests(unittest.TestCase):
         self.assertEqual(first, second)
 
     def test_fixed_implementation_passes_every_assertion(self) -> None:
-        fixed = [row for row in self.report["results"] if row["implementation"] == "fixed"]
+        fixed = [
+            row for row in self.report["results"] if row["implementation"] == "fixed"
+        ]
         self.assertTrue(fixed)
         self.assertTrue(all(row["passed"] for row in fixed))
         self.assertTrue(all(all(row["assertions"].values()) for row in fixed))
@@ -27,7 +29,9 @@ class EvaluatorTests(unittest.TestCase):
         after = self.report["summary"]["fixed"]
         self.assertLess(before["score_percent"], 60.0)
         self.assertGreater(after["score_percent"], before["score_percent"])
-        self.assertLess(before["trial_pass_rate_percent"], after["trial_pass_rate_percent"])
+        self.assertLess(
+            before["trial_pass_rate_percent"], after["trial_pass_rate_percent"]
+        )
 
     def test_ambiguous_commit_reuses_idempotency_key(self) -> None:
         result = next(
@@ -38,7 +42,10 @@ class EvaluatorTests(unittest.TestCase):
             and row["trial"] == 1
         )
         calls = [event for event in result["trace"] if event["tool"] == "issue_refund"]
-        self.assertEqual([event["outcome"] for event in calls], ["error_after_commit", "idempotent_replay"])
+        self.assertEqual(
+            [event["outcome"] for event in calls],
+            ["error_after_commit", "idempotent_replay"],
+        )
         self.assertEqual(len({event["idempotency_key"] for event in calls}), 1)
         self.assertEqual(result["final_state"]["order"]["refund_effect_count"], 1)
 
@@ -83,6 +90,29 @@ class EvaluatorTests(unittest.TestCase):
     def test_score_has_all_declared_assertions(self) -> None:
         for result in self.report["results"]:
             self.assertEqual(tuple(result["assertions"]), ASSERTION_NAMES)
+
+    def test_default_release_gate_passes(self) -> None:
+        gate = self.report["release_gate"]
+        self.assertTrue(gate["passed"])
+        self.assertTrue(all(check["passed"] for check in gate["checks"].values()))
+
+    def test_release_gate_fails_below_threshold(self) -> None:
+        summary = {
+            "fixed": {
+                "score_percent": 97.5,
+                "trial_pass_rate_percent": 92.0,
+            }
+        }
+        gate = _release_gate(
+            summary, min_assertion_score=98.0, min_trial_pass_rate=95.0
+        )
+        self.assertFalse(gate["passed"])
+        self.assertFalse(gate["checks"]["assertion_score"]["passed"])
+        self.assertFalse(gate["checks"]["fully_passing_trials"]["passed"])
+
+    def test_release_gate_rejects_invalid_threshold(self) -> None:
+        with self.assertRaisesRegex(ValueError, "between 0 and 100"):
+            evaluate("smoke", trials=1, min_assertion_score=100.1)
 
 
 if __name__ == "__main__":

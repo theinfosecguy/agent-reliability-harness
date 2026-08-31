@@ -13,6 +13,15 @@ Suite: `full` · Case pack: `1.0.0` · Cases: 10 · Repeated trials per case: 5
 
 Improvement: **+51.25 percentage points** in assertion score and **+90.00 points** in fully passing trials.
 
+## Release gate
+
+Status: **PASS**
+
+| Check | Minimum | Actual | Result |
+|---|---:|---:|---:|
+| Assertion score | 100.00% | 100.00% | PASS |
+| Fully passing trials | 100.00% | 100.00% | PASS |
+
 ## Case results
 
 | Case | Injected fault | Before score | After score |

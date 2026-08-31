@@ -21,6 +21,9 @@ def render_markdown(report: dict[str, Any]) -> str:
     before = report["summary"]["unreliable"]
     after = report["summary"]["fixed"]
     improvement = report["summary"]["improvement"]
+    gate = report["release_gate"]
+    assertion_gate = gate["checks"]["assertion_score"]
+    trial_gate = gate["checks"]["fully_passing_trials"]
     lines = [
         "# SAMPLE/DEMO — AI Agent Reliability Scorecard",
         "",
@@ -46,6 +49,19 @@ def render_markdown(report: dict[str, Any]) -> str:
         f"in assertion score and **+{improvement['trial_pass_rate_delta_points']:.2f} points** "
         "in fully passing trials.",
         "",
+        "## Release gate",
+        "",
+        f"Status: **{'PASS' if gate['passed'] else 'FAIL'}**",
+        "",
+        "| Check | Minimum | Actual | Result |",
+        "|---|---:|---:|---:|",
+        f"| Assertion score | {assertion_gate['minimum_percent']:.2f}% | "
+        f"{assertion_gate['actual_percent']:.2f}% | "
+        f"{'PASS' if assertion_gate['passed'] else 'FAIL'} |",
+        f"| Fully passing trials | {trial_gate['minimum_percent']:.2f}% | "
+        f"{trial_gate['actual_percent']:.2f}% | "
+        f"{'PASS' if trial_gate['passed'] else 'FAIL'} |",
+        "",
         "## Case results",
         "",
         "| Case | Injected fault | Before score | After score |",
@@ -65,7 +81,9 @@ def render_markdown(report: dict[str, Any]) -> str:
         fixed = grouped[(case_id, "fixed")]
         total_before = sum(row["assertion_total"] for row in unreliable)
         total_after = sum(row["assertion_total"] for row in fixed)
-        score_before = 100 * sum(row["assertion_score"] for row in unreliable) / total_before
+        score_before = (
+            100 * sum(row["assertion_score"] for row in unreliable) / total_before
+        )
         score_after = 100 * sum(row["assertion_score"] for row in fixed) / total_after
         lines.append(
             f"| `{case_id}` | {_fault_label(unreliable[0])} | {score_before:.2f}% | {score_after:.2f}% |"
@@ -92,6 +110,8 @@ def write_reports(report: dict[str, Any], output_dir: Path) -> tuple[Path, Path]
     stem = f"sample_demo_{report['suite']}_scorecard"
     json_path = output_dir / f"{stem}.json"
     markdown_path = output_dir / f"{stem}.md"
-    json_path.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    json_path.write_text(
+        json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
     markdown_path.write_text(render_markdown(report), encoding="utf-8")
     return json_path, markdown_path

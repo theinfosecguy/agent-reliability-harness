@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 from collections import defaultdict
+from pathlib import Path
 from typing import Any
 
 from .agents import IMPLEMENTATIONS
@@ -35,7 +36,8 @@ def _contains(actual: Any, expected: Any) -> bool:
 
     if isinstance(expected, dict):
         return isinstance(actual, dict) and all(
-            key in actual and _contains(actual[key], value) for key, value in expected.items()
+            key in actual and _contains(actual[key], value)
+            for key, value in expected.items()
         )
     if isinstance(expected, list):
         return actual == expected
@@ -74,7 +76,8 @@ def _assertions(
     argument_results: dict[str, bool] = {}
     for tool, expected_args in case.expected["required_args"].items():
         argument_results[tool] = any(
-            event.tool == tool and _contains(event.args, expected_args) for event in successful
+            event.tool == tool and _contains(event.args, expected_args)
+            for event in successful
         )
     tool_arguments = all(argument_results.values())
 
@@ -85,7 +88,8 @@ def _assertions(
     retry_faults = {
         fault.tool: fault.kind
         for fault in case.faults
-        if fault.kind in {"429", "5xx", "timeout", "malformed_result", "5xx_after_commit"}
+        if fault.kind
+        in {"429", "5xx", "timeout", "malformed_result", "5xx_after_commit"}
     }
     retry_checks = {
         tool: sum(event.tool == tool for event in tool_events) >= 2
@@ -114,9 +118,10 @@ def _assertions(
 
     event_resume_handling = True
     if case.special.get("event_copies", 1) > 1:
-        event_resume_handling = (
-            case.request["event_id"] in store.processed_events
-            and any(event.event_type == "duplicate_ignored" for event in events)
+        event_resume_handling = case.request[
+            "event_id"
+        ] in store.processed_events and any(
+            event.event_type == "duplicate_ignored" for event in events
         )
     if case.special.get("interrupt_after_tool"):
         event_resume_handling = (
@@ -171,7 +176,9 @@ def _run_trial(case: CaseDefinition, implementation: str, trial: int) -> dict[st
                 break
             except AgentInterrupted as exc:
                 resume_attempt += 1
-                errors.append({"type": type(exc).__name__, "code": exc.code, "message": str(exc)})
+                errors.append(
+                    {"type": type(exc).__name__, "code": exc.code, "message": str(exc)}
+                )
                 runtime.record_agent_event(
                     "harness_resume",
                     copy_number=copy_number,
@@ -238,7 +245,9 @@ def _summarize(results: list[dict[str, Any]]) -> dict[str, Any]:
         passed_trials = sum(bool(row["passed"]) for row in rows)
         completed_trials = sum(bool(row["diagnostics"]["completed"]) for row in rows)
         summary[implementation] = {
-            "label": "BEFORE — deliberately unreliable sample" if implementation == "unreliable" else "AFTER — fixed sample",
+            "label": "BEFORE — deliberately unreliable sample"
+            if implementation == "unreliable"
+            else "AFTER — fixed sample",
             "score_percent": round(100 * passed_assertions / total_assertions, 2),
             "assertions_passed": passed_assertions,
             "assertions_total": total_assertions,
@@ -252,7 +261,8 @@ def _summarize(results: list[dict[str, Any]]) -> dict[str, Any]:
 
     summary["improvement"] = {
         "assertion_score_delta_points": round(
-            summary["fixed"]["score_percent"] - summary["unreliable"]["score_percent"], 2
+            summary["fixed"]["score_percent"] - summary["unreliable"]["score_percent"],
+            2,
         ),
         "trial_pass_rate_delta_points": round(
             summary["fixed"]["trial_pass_rate_percent"]
@@ -263,20 +273,58 @@ def _summarize(results: list[dict[str, Any]]) -> dict[str, Any]:
     return summary
 
 
-def evaluate(suite: str = "full", trials: int | None = None) -> dict[str, Any]:
+def _release_gate(
+    summary: dict[str, Any],
+    min_assertion_score: float,
+    min_trial_pass_rate: float,
+) -> dict[str, Any]:
+    for name, value in (
+        ("min_assertion_score", min_assertion_score),
+        ("min_trial_pass_rate", min_trial_pass_rate),
+    ):
+        if not 0.0 <= value <= 100.0:
+            raise ValueError(f"{name} must be between 0 and 100")
+
+    fixed = summary["fixed"]
+    checks = {
+        "assertion_score": {
+            "actual_percent": fixed["score_percent"],
+            "minimum_percent": float(min_assertion_score),
+            "passed": fixed["score_percent"] >= min_assertion_score,
+        },
+        "fully_passing_trials": {
+            "actual_percent": fixed["trial_pass_rate_percent"],
+            "minimum_percent": float(min_trial_pass_rate),
+            "passed": fixed["trial_pass_rate_percent"] >= min_trial_pass_rate,
+        },
+    }
+    return {
+        "passed": all(check["passed"] for check in checks.values()),
+        "checks": checks,
+    }
+
+
+def evaluate(
+    suite: str = "full",
+    trials: int | None = None,
+    casepack_path: Path | None = None,
+    min_assertion_score: float = 100.0,
+    min_trial_pass_rate: float = 100.0,
+) -> dict[str, Any]:
     """Run both implementations against a deterministic case suite."""
 
     if trials is None:
         trials = 2 if suite == "smoke" else 5
     if trials < 1:
         raise ValueError("trials must be at least 1")
-    casepack, cases = select_cases(suite)
+    casepack, cases = select_cases(suite, casepack_path)
     results = [
         _run_trial(case, implementation, trial)
         for case in cases
         for implementation in ("unreliable", "fixed")
         for trial in range(1, trials + 1)
     ]
+    summary = _summarize(results)
     return {
         "label": "SAMPLE/DEMO — deterministic AI-agent reliability scorecard",
         "disclaimer": casepack["disclaimer"],
@@ -288,6 +336,11 @@ def evaluate(suite: str = "full", trials: int | None = None) -> dict[str, Any]:
         "case_count": len(cases),
         "implementations": ["unreliable", "fixed"],
         "assertion_names": list(ASSERTION_NAMES),
-        "summary": _summarize(results),
+        "summary": summary,
+        "release_gate": _release_gate(
+            summary,
+            min_assertion_score=min_assertion_score,
+            min_trial_pass_rate=min_trial_pass_rate,
+        ),
         "results": results,
     }

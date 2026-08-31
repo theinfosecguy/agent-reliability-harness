@@ -44,6 +44,25 @@ python3 -m reliability_harness --suite smoke
 Override repetition explicitly with `--trials N`. The same case and trial always
 use the same seed and simulated telemetry.
 
+## Configure a release gate
+
+The command can enforce explicit assertion and fully-passing-trial thresholds,
+write those thresholds and results into both scorecards, and exit non-zero when
+either check fails:
+
+```bash
+python3 -m reliability_harness --suite full \
+  --min-assertion-score 100 \
+  --min-trial-pass-rate 100
+```
+
+The public CI workflow runs that full gate on Python 3.10, 3.12, and 3.13 and
+uploads the JSON and Markdown scorecards as a workflow artifact. A compatible
+versioned case pack can be selected explicitly with `--casepack path/to/cases.json`.
+The bundled runtime is intentionally specific to the synthetic refund workflow;
+adapting another agent still requires the runtime and assertions described
+below, rather than merely swapping JSON.
+
 ## What the harness verifies
 
 Each trial independently scores eight properties:
